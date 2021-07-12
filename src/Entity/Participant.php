@@ -3,14 +3,20 @@
 namespace App\Entity;
 
 use App\Repository\ParticipantRepository;
+use App\Entity\Sortie;
+use App\Entity\Campus;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=ParticipantRepository::class)
+ * @UniqueEntity(fields={"pseudo"}, message="There is already an account with this identifiant")
  */
-class Participant
+class Participant implements UserInterface
 {
     /**
      * @ORM\Id
@@ -30,6 +36,11 @@ class Participant
     private $prenom;
 
     /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $pseudo;
+
+    /**
      * @ORM\Column(type="string", length=10)
      */
     private $telephone;
@@ -45,7 +56,12 @@ class Participant
     private $motPasse;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $administrateur;
 
@@ -106,6 +122,18 @@ class Participant
     public function setPrenom(string $prenom): self
     {
         $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    public function getPseudo(): ?string
+    {
+        return $this->pseudo;
+    }
+
+    public function setPseudo(string $pseudo): self
+    {
+        $this->pseudo = $pseudo;
 
         return $this;
     }
@@ -246,5 +274,62 @@ class Participant
         $this->campus = $campus;
 
         return $this;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUsername(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        return $this->roles;
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getPassword(): string
+    {
+        return (string) $this->motPasse;
+    }
+
+    public function setPassword(string $motPasse): self
+    {
+        $this->motPasse = $motPasse;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getSalt()
+    {
+        // not needed when using the "bcrypt" algorithm in security.yaml
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 }
