@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ParticipantRepository::class)
@@ -26,31 +27,43 @@ class Participant implements UserInterface
     private $id;
 
     /**
+     * @Assert\NotBlank
      * @ORM\Column(type="string", length=50)
      */
     private $nom;
 
     /**
+     * @Assert\NotBlank
      * @ORM\Column(type="string", length=50)
      */
     private $prenom;
 
     /**
+     * @Assert\NotBlank
      * @ORM\Column(type="string", length=50)
      */
     private $pseudo;
 
     /**
+     * @Assert\Length(10)
+     * @Assert\NotBlank(message="Veuillez remplir votre numero de telephone")
      * @ORM\Column(type="string", length=10)
      */
     private $telephone;
 
     /**
+     * @Assert\Email(message="saisissez un email valide")
      * @ORM\Column(type="string", length=255)
      */
     private $mail;
 
     /**
+     * @Assert\Length(
+     *     min=6,
+     *     max=255,
+     *     minMessage="Minimum 4 characters please!",
+     *     maxMessage="Maximum 255 characters please!"
+     * )
      * @ORM\Column(type="string", length=255)
      */
     private $motPasse;
@@ -67,12 +80,18 @@ class Participant implements UserInterface
     private $actif;
 
     /**
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $photoProfil;
 
     /**
      *
+     * @Assert\File(
+     *     maxSize = "1024k",
+     *     mimeTypes = {"image/png", "image/jpg", "image/jpeg"},
+     *     mimeTypesMessage = "l'image doit etre aux formats suivants .jpg, .png, .jpeg"
+     * )
      */
     private $photoProfilFile;
 
