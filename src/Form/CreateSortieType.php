@@ -2,9 +2,11 @@
 
 namespace App\Form;
 
+use App\Entity\Campus;
 use App\Entity\Sortie;
 use phpDocumentor\Reflection\Type;
 use phpDocumentor\Reflection\Types\Integer;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -29,7 +31,11 @@ class CreateSortieType extends AbstractType
             ->add('nbInscriptionsMax')
             ->add('infosSortie')
             ->add('etat')
-
+            ->add('campus',EntityType::class, [
+                'label' => 'Campus',
+                'class' => Campus::class,
+                'choice_label' => 'nom'
+            ])
         ;
     }
 

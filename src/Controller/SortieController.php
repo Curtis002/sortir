@@ -23,7 +23,7 @@ class SortieController extends AbstractController
     ): Response
     {
         $sortie = new Sortie();
-       $sortie->setDateHeureDebut(new \DateTime());
+        $sortie->setDateHeureDebut(new \DateTime());
 
         $sortieForm = $this->createForm(CreateSortieType::class, $sortie);
         $sortieForm->handleRequest($request);
