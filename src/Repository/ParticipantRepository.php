@@ -6,8 +6,8 @@ use App\Entity\Participant;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Participant\PasswordUpgraderInterface;
-use Symfony\Component\Security\Core\Participant\UserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+
 
 /**
  * @method Participant|null find($id, $lockMode = null, $lockVersion = null)
