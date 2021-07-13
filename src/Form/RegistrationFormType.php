@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Campus;
 use App\Entity\Participant;
+
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -31,36 +32,14 @@ class RegistrationFormType extends AbstractType
             ->add('telephone')
             ->add('mail')
 
-            ->add('photoProfil', FileType::class, [
-                'label' => 'Ma photo',
 
-                // unmapped means that this field is not associated to any entity property
-                //'mapped' => false,
-
-                // make it optional so you don't have to re-upload the PDF file
-                // every time you edit the Product details
-                'required' => true,
-
-                // unmapped fields can't define their validation using annotations
-                // in the associated entity, so you can use the PHP constraint classes
-                'constraints' => [
-                    new File([
-                        'maxSize' => '50000k',
-                        /*'mimeTypes' => [
-                            'application/jpeg',
-                            'application/png',
-                            'application/jpg',
-                        ],*/
-                        'mimeTypesMessage' => 'Please upload a valid jpeg, jpg, png document',
-                    ])
-                ],
-            ])
             ->add('campus', EntityType::class, [
                 'label' => 'Campus',
                 //quelle est la classe à afficher ici ?
                 'class' => Campus::class,
                 //quelle propriété utiliser pour les <option> dans la liste déroulante ?
-                'choice_label' => 'nom'
+                'choice_label' => 'nom',
+                'placeholder' => '--Choisir une catégorie--'
             ])
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
