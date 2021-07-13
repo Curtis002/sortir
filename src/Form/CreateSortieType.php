@@ -3,15 +3,18 @@
 namespace App\Form;
 
 use App\Entity\Campus;
+use App\Entity\Etat;
 use App\Entity\Sortie;
 use phpDocumentor\Reflection\Type;
 use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class CreateSortieType extends AbstractType
 {
@@ -19,22 +22,28 @@ class CreateSortieType extends AbstractType
     {
         $builder
             ->add('nom')
-            ->add('dateHeureDebut', DateType::class, [
+            ->add('dateHeureDebut', DateTimeType::class, [
                 'html5' => true,
                 'widget' => 'single_text'
             ])
             ->add('duree', IntegerType::class)
-            ->add('dateLimiteInscription', DateType::class, [
+            ->add('dateLimiteInscription', DateTimeType::class, [
                 'html5' => true,
                 'widget' => 'single_text'
             ])
             ->add('nbInscriptionsMax')
             ->add('infosSortie')
-            ->add('etat')
+            ->add('etatSortie', EntityType::class, [
+                'label' => 'Etat',
+                'class' => Etat::class,
+                'choice_label' => 'libelle',
+                'placeholder' => '--Choisir un état--'
+            ])
             ->add('campus',EntityType::class, [
                 'label' => 'Campus',
                 'class' => Campus::class,
-                'choice_label' => 'nom'
+                'choice_label' => 'nom',
+                'placeholder' => '--Choisir un campus--'
             ])
         ;
     }
