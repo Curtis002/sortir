@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Creation d'une nouvelle sortie {% endblock %}
+
+{% block body %}
+    <h1>Nouvelle sortie</h1>
+
+    <div>
+        {{ form_start(sortieForm) }}
+
+        {{ form_widget(sortieForm) }}
+
+        <button type="button" class="btn btn-info">Create</button>
+
+        {{ form_end(sortieForm) }}
+    </div>
+{% endblock %}
+

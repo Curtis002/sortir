@@ -7,12 +7,26 @@
         <title>{% block title %} Sorties !{% endblock %}</title>
 
         <!-- CSS -->
+        <link href="{{ asset('css/normalize.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/style.css') }}" rel="stylesheet">
         <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
 
     </head>
     <body>
     <div>{%  include('inc/nav.html.twig') %}</div>
+
+
+    {# read and display all flash messages #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-dark" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+
         {% block body %}{% endblock %}
     </body>
 </html>
