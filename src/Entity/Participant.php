@@ -60,10 +60,6 @@ class Participant implements UserInterface
      */
     private $roles = [];
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $administrateur;
 
     /**
      * @ORM\Column(type="boolean")
@@ -74,6 +70,11 @@ class Participant implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $photoProfil;
+
+    /**
+     *
+     */
+    private $photoProfilFile;
 
     /**
      * @ORM\ManyToMany(targetEntity=Sortie::class, inversedBy="participants")
@@ -174,17 +175,6 @@ class Participant implements UserInterface
         return $this;
     }
 
-    public function getAdministrateur(): ?bool
-    {
-        return $this->administrateur;
-    }
-
-    public function setAdministrateur(bool $administrateur): self
-    {
-        $this->administrateur = $administrateur;
-
-        return $this;
-    }
 
     public function getActif(): ?bool
     {
@@ -206,6 +196,18 @@ class Participant implements UserInterface
     public function setPhotoProfil(?string $photoProfil): self
     {
         $this->photoProfil = $photoProfil;
+
+        return $this;
+    }
+
+    public function getPhotoProfilFile(): ?string
+    {
+        return $this->photoProfilFile;
+    }
+
+    public function setPhotoProfilFile(string $photoProfilFile): self
+    {
+        $this->photoProfilFile = $photoProfilFile;
 
         return $this;
     }

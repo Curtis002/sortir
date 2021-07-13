@@ -11,13 +11,20 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class RegistrationController extends AbstractController
 {
     /**
      * @Route("/register", name="app_register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, AppAuthenticator $authenticator): Response
+    public function register(
+        Request $request,
+        UserPasswordEncoderInterface $passwordEncoder,
+        SluggerInterface $slugger,
+        GuardAuthenticatorHandler $guardHandler,
+        AppAuthenticator $authenticator
+    ): Response
     {
         $user = new Participant();
         $user->setRoles(["ROLE_USER"]);
@@ -26,14 +33,32 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
+            $photoProfilFile = $form->get('photoProfil')->getData();
             $user->setMotPasse(
                 $passwordEncoder->encodePassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )
-            );
 
+            );
+            if ($photoProfilFile) {
+                $originalFilename = pathinfo($photoProfilFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $photoProfilFile->guessExtension();
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $photoProfilFile->move(
+                        $this->getParameter('photo_profil_directory'),
+                        $newFilename
+                    );
+
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+                $user->setPhotoProfil($newFilename);
+            }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
