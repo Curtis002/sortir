@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon profil!{% endblock %}
+
+{% block body %}
+    <div class="text-center">
+        <h1 class="text-center mb-5 mt-3">{{ participant.pseudo }}</h1>
+    </div>
+        <div class="d-flex flex-column justify-content-center">
+            <div class="container">
+            <div class="mb-3 row">
+                <p class="col-sm-6 text-right pr-5">Prénom</p>
+                <div class="col-sm-6">
+                <p class="text-left">{{ participant.prenom }}</p>
+                </div>
+            </div>
+        <div class="mb-3 row">
+            <p class="col-sm-6 text-right pr-5">Nom</p>
+            <div class="col-sm-6">
+                <p class="text-left">{{ participant.nom }}</p>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <p class="col-sm-6 text-right pr-5">Téléphone</p>
+            <div class="col-sm-6">
+                <p class="text-left">{{ participant.telephone }}</p>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <p class="col-sm-6 text-right pr-5">Email</p>
+            <div class="col-sm-6">
+                <p class="text-left">{{ participant.mail }}</p>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <p class="col-sm-6 text-right pr-5">Campus</p>
+            <div class="col-sm-6">
+                <p class="text-left">{{ participant.campus }}</p>
+            </div>
+        </div>
+            </div>
+    </div>
+    <div class="text-center">
+        <a href="{{ path('participant_edit', { 'id': participant.id }) }}"><button class="btn btn-primary mr-3">Retour</button></a>
+    </div>
+
+{% endblock %}
