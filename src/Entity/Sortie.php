@@ -35,6 +35,7 @@ class Sortie
     private $dateHeureDebut;
 
     /**
+     * @Assert\Positive()
      * @ORM\Column(type="integer")
      */
     private $duree;
@@ -45,6 +46,7 @@ class Sortie
     private $dateLimiteInscription;
 
     /**
+     * @Assert\Positive()
      * @ORM\Column(type="integer")
      */
     private $nbInscriptionsMax;
@@ -54,10 +56,10 @@ class Sortie
      */
     private $infosSortie;
 
-    /**
+  /*  /**
      * @ORM\Column(type="string", length=255)
      */
-    private $etat;
+   /* private $etat; */
 
     /**
      * @ORM\ManyToMany(targetEntity=Participant::class, mappedBy="inscritSortie")
