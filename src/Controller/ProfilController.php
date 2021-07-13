@@ -84,12 +84,4 @@ class ProfilController extends AbstractController
             'participant' => $participant,
         ]);
     }
-
-//    /**
-//     * @Route("/mon-profil/details", name="profil_details")
-//     */
-//    public function afficher(): Response
-//    {
-//        return $this->render('profil/profilDetails.html.twig');
-//    }
 }

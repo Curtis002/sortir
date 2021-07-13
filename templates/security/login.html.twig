@@ -5,9 +5,6 @@
 {% block body %}
     <div class="container">
 <form method="post">
-{#    {% if error %}#}
-{#        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>#}
-{#    {% endif %}#}
 
     {% if app.user %}
         <div class="mb-3">
@@ -15,7 +12,7 @@
         </div>
     {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <h1 class="text-center mt-3 mb-5">Se connecter</h1>
     <label for="inputPseudo">Identifiant</label>
     <input type="text" value="" name="pseudo" id="inputPseudo" class="form-control" autocomplete="pseudo" required autofocus>
     <label for="inputPassword">Password</label>

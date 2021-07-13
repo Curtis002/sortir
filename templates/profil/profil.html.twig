@@ -8,7 +8,9 @@
     {{ form_start(profilForm) }}
     {{ form_widget(profilForm) }}
     <div class="d-flex justify-content-center">
-        <a href="{{ path('participant_show', {'id' : participant.id}) }}"><button type="submit" class="btn btn-primary mr-3">Enregistrer</button></a>
+        <a href="{{ path('participant_show', {'id' : participant.id}) }}">
+            <button type="submit" class="btn btn-primary mr-3">Enregistrer</button>
+        </a>
         <button type="reset" class="btn btn-primary">Annuler</button>
     </div>
     {{ form_end(profilForm) }}

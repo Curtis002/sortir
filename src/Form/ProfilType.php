@@ -54,11 +54,18 @@ class ProfilType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('campus', TextType::class, [
+            ->add('campus', EntityType::class, [
                 'label' => 'Campus',
+                //quelle est la classe à afficher ici ?
+                'class' => Campus::class,
+                //quelle propriété utiliser pour les <option> dans la liste déroulante ?
+                'choice_label' => 'nom',
+                'placeholder' => '--Choisir un campus--'
+            ])
+            ->add('photoProfil', FileType::class, [
+                'data_class' => null,
                 'required' => false
             ])
-            ->add('photoProfil', FileType::class)
         ;
     }
 

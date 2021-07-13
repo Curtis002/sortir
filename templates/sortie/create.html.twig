@@ -3,16 +3,14 @@
 {% block title %} Creation d'une nouvelle sortie {% endblock %}
 
 {% block body %}
-    <h1>Nouvelle sortie</h1>
-
-    <div>
-        {{ form_start(sortieForm) }}
-
-        {{ form_widget(sortieForm) }}
-
-        <button type="button" class="btn btn-info">Create</button>
-
-        {{ form_end(sortieForm) }}
+    <h1 class="text-center mt-3 mb-5">Nouvelle sortie</h1>
+    <div class="container">
+        <div>
+            {{ form_start(sortieForm) }}
+                {{ form_widget(sortieForm) }}
+                <button type="button" class="btn btn-info">Créer</button>
+            {{ form_end(sortieForm) }}
+        </div>
     </div>
 {% endblock %}
 
