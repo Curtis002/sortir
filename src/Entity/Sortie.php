@@ -29,6 +29,7 @@ class Sortie
     private $nom;
 
     /**
+     * @Assert\GreaterThanOrEqual(propertyPath="dateLimiteInscription")
      * @ORM\Column(type="datetime")
      */
     private $dateHeureDebut;
@@ -39,7 +40,6 @@ class Sortie
     private $duree;
 
     /**
-     * @Assert\GreaterThanOrEqual(propertyPath="dateHeureDebut")
      * @ORM\Column(type="datetime")
      */
     private $dateLimiteInscription;
