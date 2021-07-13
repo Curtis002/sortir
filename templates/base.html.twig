@@ -6,11 +6,12 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>{% block title %} Sorties !{% endblock %}</title>
 
+        <!-- CSS -->
+        <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
 
-        {% block extrastyles %}{% endblock %}
     </head>
     <body>
-
+    <div>{%  include('inc/nav.html.twig') %}</div>
         {% block body %}{% endblock %}
     </body>
 </html>

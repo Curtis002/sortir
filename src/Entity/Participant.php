@@ -76,17 +76,17 @@ class Participant implements UserInterface
     private $photoProfil;
 
     /**
-     * @ORM\ManyToMany(targetEntity=sortie::class, inversedBy="participants")
+     * @ORM\ManyToMany(targetEntity=Sortie::class, inversedBy="participants")
      */
     private $inscritSortie;
 
     /**
-     * @ORM\OneToMany(targetEntity=sortie::class, mappedBy="organisateur")
+     * @ORM\OneToMany(targetEntity=Sortie::class, mappedBy="organisateur")
      */
     private $organisateurSortie;
 
     /**
-     * @ORM\ManyToOne(targetEntity=campus::class, inversedBy="participants")
+     * @ORM\ManyToOne(targetEntity=Campus::class, inversedBy="participants")
      * @ORM\JoinColumn(nullable=false)
      */
     private $campus;
@@ -283,7 +283,7 @@ class Participant implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string) $this->pseudo;
     }
 
     /**

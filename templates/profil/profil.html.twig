@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon profil!{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Mon profil</h1>
+        <form>
+            <div class="mb-3">
+                <label for="pseudo" class="form-label">Pseudo</label>
+                <input type="text" class="form-control" id="pseudo" value="{{ app.user.pseudo }}" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label for="prenom" class="form-label">Prénom</label>
+                <input type="text" class="form-control" id="prenom" value="{{ app.user.prenom }}">
+            </div>
+            <div class="mb-3">
+                <label for="nom" class="form-label">Nom</label>
+                <input type="text" class="form-control" id="nom" value="{{ app.user.nom }}">
+            </div>
+            <div class="mb-3">
+                <label for="tel" class="form-label">Téléphone</label>
+                <input type="text" class="form-control" id="tel">
+            </div>
+            <div class="mb-3">
+                <label for="mail" class="form-label">E-mail</label>
+                <input type="text" class="form-control" id="mail" value="{{ app.user.mail }}">
+            </div>
+            <div class="mb-3">
+                <label for="mdp" class="form-label">Mot de passe</label>
+                <input type="password" class="form-control" id="mdp" value="{{ app.user.motPasse }}">
+            </div>
+            <div class="mb-3">
+                <label for="confmdp" class="form-label">Confirmation</label>
+                <input type="password" class="form-control" id="confmdp" value="{{ app.user.motPasse }}">
+            </div>
+            <div class="mb-3">
+                <label for="campus" class="form-label">Campus</label>
+                <input type="text" class="form-control" id="campus" value="{{ app.user.campus }}">
+            </div>
+            <div class="mb-3">
+                <label for="avatar" class="form-label">Ma photo</label>
+                <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg">
+            </div>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </form>
+    </div>
+
+
+{#{{ form(form) }}#}
+{% endblock %}
