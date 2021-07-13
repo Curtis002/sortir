@@ -1,0 +1,13 @@
+{{ form_start(form,{attr: {class: 'filter'}}) }}
+
+<h4>Campus</h4>
+{{ form_row(form.campus) }}
+
+<h4>Le nom de la sortie contient</h4>
+{{ form_row(form.q) }}
+
+<h4>Entre {{ form_row(form.dateDebut) }} et {{ form_row(form.dateFin) }} </h4>
+
+<button type="submit" class="btn">Rechercher</button>
+{{ form_end(form) }}
+
