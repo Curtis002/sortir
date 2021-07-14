@@ -6,7 +6,6 @@ use App\Entity\Sortie;
 use App\Data\SearchData;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @method Sortie|null find($id, $lockMode = null, $lockVersion = null)
@@ -16,17 +15,13 @@ use Knp\Component\Pager\PaginatorInterface;
  */
 class SortieRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
+
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Sortie::class);
-        $this->paginator = $paginator;
     }
 
-
-    /**
-     * @return \Knp\Component\Pager\Pagination\PaginationInterface
-     */
-    public function findSearch(SearchData $search): \Knp\Component\Pager\Pagination\PaginationInterface
+    public function findSearch(SearchData $search)
     {
         $queryBuilder = $this
             ->createQueryBuilder('s')
@@ -77,11 +72,6 @@ class SortieRepository extends ServiceEntityRepository
                 ->setParameter('campus',$search->campus);
         }
 
-        $queryBuilder = $queryBuilder->getQuery();
-        return $this->paginator->paginate(
-            $queryBuilder,
-            $search->page,
-            10
-        );
+        return $queryBuilder->getQuery();
     }
 }

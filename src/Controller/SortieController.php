@@ -19,25 +19,37 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class SortieController extends AbstractController
 {
+    private $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
 
     /**
      * @Route("/", name="list")
      */
-    public function list(SortieRepository $sortieRepository, Request $request): Response
+    public function list()
     {
-        $data = new SearchData();
-        $data->page = $request->get('page', 1);
-
-        $sortieForm = $this->createForm(SearchType::class, $data);
-
-        $sortieForm->handleRequest($request);
-
-        $sorties = $sortieRepository->findSearch($data);
+        $sorties = $this->entityManager->getRepository(Sortie::class)->findAll();
 
         return $this->render('sortie/list.html.twig', [
-            'sorties'=>$sorties,
-            'form'=>$sortieForm->createView()
+            'sorties' => $sorties
         ]);
+
+//        $data = new SearchData();
+//        $data->page = $request->get('page', 1);
+//
+//        $sortieForm = $this->createForm(SearchType::class, $data);
+//
+//        $sortieForm->handleRequest($request);
+//
+//        $sorties = $sortieRepository->findSearch($data);
+//
+//        return $this->render('sortie/list.html.twig', [
+//            'sorties'=>$sorties,
+//            'sortiesForm'=>$sortieForm->createView()
+//        ]);
     }
 
     /**
@@ -77,7 +89,7 @@ class SortieController extends AbstractController
 
         return $this->render('sortie/create.html.twig'
         , [
-                  'sortieForm' => $sortieForm->createView()
+                  'form' => $sortieForm->createView()
         ]);
     }
 
