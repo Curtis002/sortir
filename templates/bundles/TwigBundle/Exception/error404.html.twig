@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>You are lost!</h2>
+    <p><a href="{{ path('home') }}" title="Go back to homepage">Click here to go back home!</a></p>
+{% endblock %}
+
+{% block title %}Error 404 ! | {{ parent() }}{% endblock %}

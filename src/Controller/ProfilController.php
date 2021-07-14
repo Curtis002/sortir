@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Participant;
 use App\Form\ProfilType;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -52,7 +53,7 @@ class ProfilController extends AbstractController
     /**
      * @Route("mon-profil/{id}/edit", name="participant_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Participant $participant, UserPasswordEncoderInterface $passwordEncoder, SluggerInterface $slugger): Response
+    public function edit(Request $request, Participant $participant, UserPasswordEncoderInterface $passwordEncoder, FileUploader $fileUploader): Response
     {
 
         $form = $this->createForm(ProfilType::class, $participant);
@@ -61,7 +62,14 @@ class ProfilController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
                 $photoProfilFile = $form->get('photoProfil')->getData();
 
+
             if ($photoProfilFile) {
+                $photoProfil = $fileUploader->upload($photoProfilFile);
+                $participant->setPhotoProfil($photoProfil);
+
+            }
+
+            /*if ($photoProfilFile) {
                 $originalFilename = pathinfo($photoProfilFile->getClientOriginalName(), PATHINFO_FILENAME);
                 // this is needed to safely include the file name as part of the URL
                 $safeFilename = $slugger->slug($originalFilename);
@@ -79,7 +87,7 @@ class ProfilController extends AbstractController
             } else {
                 $existingFile = $participant->getPhotoProfil();
                 $participant->setPhotoProfil($existingFile);
-            }
+            }*/
             // encode the plain password
             $participant->setMotPasse(
                 $passwordEncoder->encodePassword(
