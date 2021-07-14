@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}  Sorties {% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            {% include 'sortie/filter.html.twig' with {form: form} only %}
+        </div>
+        <div>
+            {% for sortie in sorties %}
+                <div>
+                    <div>Nom de la sortie {{ sortie.nom }}</div>
+                    <div>Date de la sortie {{ sortie.dateHeureDebut }}</div>
+                    <div>Cloture {{ sortie.dateHeureDebut }}</div>
+                    <div>Inscrit/Places {{ sortie.participants }}/{{ sortie.nbInscriptionsMax }}</div>
+                    <div>Etat {{ sortie.etat }}</div>
+                    <div>Inscrit {{ sortie.participants }}</div>
+                    <div>Organisateur {{ sortie.organisateur }}</div>
+                    <div>Actions {{ path('sortie_detail') }} {{ sortie.addParticipant() }}
+                        - {{ sortie.removeParticipant() }}</div>
+                </div>
+            {% endfor %}
+        </div>
+        <div>
+            {{ knp_pagination_render(sorties) }}
+        </div>
+    </div>
+
+{% endblock %}
