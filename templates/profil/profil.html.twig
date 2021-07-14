@@ -4,12 +4,18 @@
 
 {% block body %}
 <div class="container">
-    <h1 class="text-center mb-5 mt-3">Mon profil</h1>
+    <h1 class="text-center mb-3 mt-3">Mon profil</h1>
+    <div class="d-flex justify-content-center mb-3">
+        <div class="circular--landscape">
+            <img src="{{ asset('img/avatar/' ~ participant.photoProfil ) }}" alt="{{ participant.photoProfil }}">
+        </div>
+    </div>
+
     {{ form_start(profilForm) }}
     {{ form_widget(profilForm) }}
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center mt-3">
         <a href="{{ path('participant_show', {'id' : participant.id}) }}">
-            <button type="submit" class="btn btn-primary mr-3">Enregistrer</button>
+        <button type="submit" class="btn btn-primary mr-3">Enregistrer</button>
         </a>
         <button type="reset" class="btn btn-primary">Annuler</button>
     </div>

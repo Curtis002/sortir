@@ -1,3 +1,20 @@
 .custom-center{
     width: 80%;
 }
+.circular--landscape {
+    display: inline-block;
+    position: relative;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+.circular--landscape img {
+    width: auto;
+    height: 100%;
+    margin-left: -60px;
+}
+#avatar-profil{
+    width: 80%;
+    float: right;
+}

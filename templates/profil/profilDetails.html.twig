@@ -3,11 +3,17 @@
 {% block title %}Mon profil!{% endblock %}
 
 {% block body %}
+<div class="container">
+
     <div class="text-center">
         <h1 class="text-center mb-5 mt-3">{{ participant.pseudo }}</h1>
     </div>
-        <div class="d-flex flex-column justify-content-center">
-            <div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <img src="{{ asset('img/avatar/' ~ participant.photoProfil ) }}" alt="{{ participant.photoProfil }}" id="avatar-profil">
+        </div>
+        <div class="col-md-6 d-flex flex-column justify-content-center">
+
             <div class="mb-3 row">
                 <p class="col-sm-6 text-right pr-5">Prénom</p>
                 <div class="col-sm-6">
@@ -38,10 +44,11 @@
                 <p class="text-left">{{ participant.campus.nom }}</p>
             </div>
         </div>
-            </div>
-    </div>
     <div class="text-center">
         <a href="{{ path('participant_edit', { 'id': participant.id }) }}"><button class="btn btn-primary mr-3">Retour</button></a>
     </div>
+            </div>
 
+    </div>
+</div>
 {% endblock %}

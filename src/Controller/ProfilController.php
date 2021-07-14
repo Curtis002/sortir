@@ -6,10 +6,12 @@ use App\Entity\Participant;
 use App\Form\ProfilType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ProfilController extends AbstractController
 {
@@ -50,12 +52,34 @@ class ProfilController extends AbstractController
     /**
      * @Route("mon-profil/{id}/edit", name="participant_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Participant $participant, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function edit(Request $request, Participant $participant, UserPasswordEncoderInterface $passwordEncoder, SluggerInterface $slugger): Response
     {
+
         $form = $this->createForm(ProfilType::class, $participant);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+                $photoProfilFile = $form->get('photoProfil')->getData();
+
+            if ($photoProfilFile) {
+                $originalFilename = pathinfo($photoProfilFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $photoProfilFile->guessExtension();
+                // Move the file to the directory where avatars are stored
+                try {
+                    $photoProfilFile->move(
+                        $this->getParameter('photo_profil_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+                $participant->setPhotoProfil($newFilename);
+            } else {
+                $existingFile = $participant->getPhotoProfil();
+                $participant->setPhotoProfil($existingFile);
+            }
             // encode the plain password
             $participant->setMotPasse(
                 $passwordEncoder->encodePassword(
