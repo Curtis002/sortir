@@ -36,6 +36,10 @@ class Sortie
 
     /**
      * @Assert\Positive()
+     * @Assert\Range(
+     *     min = "1 minute",
+     *     max = "300 minutes"
+     * )
      * @ORM\Column(type="integer")
      */
     private $duree;
