@@ -1,19 +1,27 @@
-{{ form_start(sortiesForm) }}
-<div class="container">
-    <div class="row">
-        <div class="col-sm">
-            <h4>Campus</h4>
-            {{ form_row(sortiesForm.campus) }}
-
-            <h4>Le nom de la sortie contient</h4>
-            {{ form_row(sortiesForm.q) }}
-
-            <h4>Entre {{ form_row(sortiesForm.dateDebut) }} et {{ form_row(sortiesForm.dateFin) }} </h4>
-        </div>
+{% block body %}
+    <div class="container">
+        {{ form_start(sortiesForm) }}
         <div class="row">
-            <button type="submit" class="btn btn-primary">Rechercher</button>
-        </div>
-    </div>
-</div>
-{{ form_end(sortiesForm) }}
+            <div class="col-sm">
+                <h4>Campus</h4>
+                {{ form(sortiesForm.campus) }}
 
+                <h4>Le nom de la sortie contient</h4>
+                {{ form(sortiesForm.q) }}
+
+                <h4>Entre {{ form(sortiesForm.dateDebut) }} et {{ form(sortiesForm.dateFin) }} </h4>
+            </div>
+            <div class="col-sm">
+                {{ form(sortiesForm.organisateur) }}
+                {{ form(sortiesForm.inscrit) }}
+                {{ form(sortiesForm.notInscrit) }}
+                {{ form(sortiesForm.terminees) }}
+            </div>
+            <div class="row">
+                <button type="submit" class="btn btn-secondary btn-sm">Rechercher</button>
+            </div>
+        </div>
+
+        {{ form_end(sortiesForm) }}
+    </div>
+{% endblock %}

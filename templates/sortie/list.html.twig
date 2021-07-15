@@ -28,9 +28,9 @@
                         <td>{{ sortie.dateHeureDebut|format_datetime('short', 'none', locale='fr') }}</td>
                         <td>{{ sortie.dateLimiteInscription|format_datetime('short', 'none', locale='fr') }}</td>
                         <td>{{ sortie.participants|length }} / {{ sortie.nbInscriptionsMax }}</td>
-                        {# <td>{{ sortie.etatSortie.libelle }}</td> #}
+                        <td>{{ sortie.etatSortie }}</td>
                         <td>TODO</td>
-                        {# <td>{{ sortie.organisateur.pseudo }}</td> #}
+                        <td>{{ sortie.organisateur }}</td>
                         <td><a href="{{ path('sortie_detail', {'id': sortie.id}) }}">Afficher</a></td>
                     </tr>
                     </tbody>
