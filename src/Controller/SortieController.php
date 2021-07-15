@@ -29,27 +29,21 @@ class SortieController extends AbstractController
     /**
      * @Route("/", name="list")
      */
-    public function list()
+    public function list(SortieRepository $sortieRepository, Request $request)
     {
-        $sorties = $this->entityManager->getRepository(Sortie::class)->findAll();
+
+        $data = new SearchData();
+ //       $data->page = $request->get('page', 1);
+
+        $sortieForm = $this->createForm(SearchType::class, $data);
+        $sortieForm->handleRequest($request);
+
+        $sorties = $sortieRepository->findSearch($data);
 
         return $this->render('sortie/list.html.twig', [
-            'sorties' => $sorties
+            'sorties'=>$sorties,
+            'sortiesForm'=>$sortieForm->createView()
         ]);
-
-//        $data = new SearchData();
-//        $data->page = $request->get('page', 1);
-//
-//        $sortieForm = $this->createForm(SearchType::class, $data);
-//
-//        $sortieForm->handleRequest($request);
-//
-//        $sorties = $sortieRepository->findSearch($data);
-//
-//        return $this->render('sortie/list.html.twig', [
-//            'sorties'=>$sorties,
-//            'sortiesForm'=>$sortieForm->createView()
-//        ]);
     }
 
     /**

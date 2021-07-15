@@ -1,13 +1,19 @@
-{{ form_start(form,{attr: {class: 'filter'}}) }}
+{{ form_start(sortiesForm) }}
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <h4>Campus</h4>
+            {{ form_row(sortiesForm.campus) }}
 
-<h4>Campus</h4>
-{{ form_row(form.campus) }}
+            <h4>Le nom de la sortie contient</h4>
+            {{ form_row(sortiesForm.q) }}
 
-<h4>Le nom de la sortie contient</h4>
-{{ form_row(form.q) }}
-
-<h4>Entre {{ form_row(form.dateDebut) }} et {{ form_row(form.dateFin) }} </h4>
-
-<button type="submit" class="btn">Rechercher</button>
-{{ form_end(form) }}
+            <h4>Entre {{ form_row(sortiesForm.dateDebut) }} et {{ form_row(sortiesForm.dateFin) }} </h4>
+        </div>
+        <div class="row">
+            <button type="submit" class="btn btn-primary">Rechercher</button>
+        </div>
+    </div>
+</div>
+{{ form_end(sortiesForm) }}
 

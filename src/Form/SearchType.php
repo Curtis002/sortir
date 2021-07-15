@@ -9,7 +9,6 @@ use App\Data\SearchData;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,12 +20,12 @@ class SearchType extends AbstractType
     {
         $builder
             ->add('campus', EntityType::class, [
-                'label' => 'Campus',
+                'label' => false,
                 //quelle est la classe à afficher ici ?
                 'class' => Campus::class,
                 //quelle propriété utiliser pour les <option> dans la liste déroulante ?
                 'choice_label' => 'nom',
-                'placeholder' => '--Sélectionner un campus--'
+                'placeholder' => '--Choisir un campus--'
             ])
             ->add('q', TextType::class, [
                 'label' => false,
@@ -36,14 +35,13 @@ class SearchType extends AbstractType
                 ]
             ])
             ->add('dateDebut', DateType::class, [
-                'html5'=>true,
-                'widget'=>'single_text',
+                'html5' => true,
+                'widget' => 'single_text',
             ])
             ->add('dateFin', DateType::class, [
-                'html5'=>true,
-                'widget'=>'single_text',
-
-                ])
+                'html5' => true,
+                'widget' => 'single_text',
+            ])
             ->add('organisateur', CheckboxType::class, [
                 'label' => 'Sortie dont je suis l organisateur',
                 'required' => false,

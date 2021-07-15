@@ -21,57 +21,60 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
-    public function findSearch(SearchData $search)
+    /**
+     * @return array
+     */
+    public function findSearch(SearchData $search): array
     {
         $queryBuilder = $this
+            //récupère les sorties
             ->createQueryBuilder('s')
-            ->select('c','s')
+            //sélectionne toutes les infos liées aux sorties et aux campus
+            ->select('c', 's')
+            //liaison campus / sorties
             ->join('s.campus', 'c');
 
-        if(!empty($search->q)) {
+        //recherche nom de sortie contient
+        if (!empty($search->q)) {
             $queryBuilder = $queryBuilder
                 ->andWhere('s.nom LIKE :q')
-                ->setParameter('q',"%{$search->q}%");
+                ->setParameter('q', "%{$search->q}%");
         }
 
-       /* if(!empty($search->dateDebut)) {
-            $queryBuilder = $queryBuilder
-                ->andWhere('dateDebut >= ')
-                ->__ A COMPLETER __ ;
-
-        } ==> A COMPLETER POUR RECHERCHER PAR DATE
-       */
-
-        if(!empty($search->organisateur)) {
-            $queryBuilder = $queryBuilder
-                ->andWhere('s.organisateur = 1')
-                ->setParameter('q',"%{$search->q}%");
-        }
-
-        if(!empty($search->inscrit)) {
-            $queryBuilder = $queryBuilder
-                ->andWhere('s.in = 1')
-                ->setParameter('q',"%{$search->q}%");
-        }
-
-        if(!empty($search->notInscrit)) {
-            $queryBuilder = $queryBuilder
-                ->andWhere('s.organisateur = 1')
-                ->setParameter('q',"%{$search->q}%");
-        }
-
-        if(!empty($search->terminees)) {
-            $queryBuilder = $queryBuilder
-                ->andWhere('s.organisateur = 1')
-                ->setParameter('q',"%{$search->q}%");
-        }
-
-        if(!empty($search->campus)) {
+        //recherche par campus
+        if (!empty($search->campus)) {
             $queryBuilder = $queryBuilder
                 ->andWhere('c.id IN (:campus)')
-                ->setParameter('campus',$search->campus);
+                ->setParameter('campus', $search->campus);
         }
 
-        return $queryBuilder->getQuery();
+        //Recherche par date
+        if (!empty($search->dateDebut && $search->dateFin)) {
+            //A COMPLETER / QUELLES CONDITIONS SUR RECHERCHE PAR DATE ?
+        }
+
+
+        //recherche checkbox
+        if (!empty($search->organisateur)) {
+            $queryBuilder = $queryBuilder
+                ->andWhere('s.organisateur = 1');
+        }
+
+        if (!empty($search->inscrit)) {
+            $queryBuilder = $queryBuilder
+                ->andWhere('s.inscrit = 1');
+        }
+
+        if (!empty($search->notInscrit)) {
+            $queryBuilder = $queryBuilder
+                ->andWhere('s.notInscrit = 1');
+                        }
+
+        if (!empty($search->terminees)) {
+            $queryBuilder = $queryBuilder
+                ->andWhere('s.terminees = 1');
+        }
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

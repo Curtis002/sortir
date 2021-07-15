@@ -6,10 +6,10 @@ use Doctrine\ORM\Mapping as ORM;
 
 class SearchData
 {
-    /**
-     * @var int
-     */
-    public $page = 1;
+//    /**
+//     * @var int
+//     */
+//    public $page = 1;
 
     /**
      * @var string
@@ -17,9 +17,9 @@ class SearchData
     public $q  = '';
 
     /**
-     * @var array
+     * @var
      */
-    public $campus = [];
+    public $campus ;
 
     /**
      * @ORM\Column(type="string")
