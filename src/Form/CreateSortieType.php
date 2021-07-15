@@ -11,12 +11,9 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreateSortieType extends AbstractType
@@ -46,32 +43,30 @@ class CreateSortieType extends AbstractType
             ->add('infosSortie', TextareaType::class, [
                 'label' => 'Description et infos'
             ])
-//
-//            ->add('campus',EntityType::class, [
-//                'label' => 'Campus',
-//                'class' => Campus::class,
-//                'choice_label' => 'nom',
-//                'placeholder' => '--Choisir un campus--'
-//            ])
-        ->add('ville', EntityType::class, [
-            'label' => 'Ville',
-            'mapped' => false,
-            'class' => Ville::class,
-            'choice_label' => 'nom'
+            ->add('ville', EntityType::class, [
+                'label' => 'Ville',
+                'mapped' => false,
+                'class' => Ville::class,
+                'choice_label' => 'nom'
             ])
-        ->add('lieu', EntityType::class, [
-            'label' => 'Lieu',
-            'class' => Lieu::class,
-            'choice_label' => 'nom'
-        ])
-        ->add('etatSortie', EntityType::class, [
+            ->add('lieuSortie', EntityType::class, [
+                'class' => Lieu::class,
+                'mapped' => false,
+                'label' => 'Lieu',
+                'required' => false,
+                'choice_label' => 'nom',
+                'placeholder' => '-- Choisir un lieu --'
+            ])
+            ->add('etatSortie', EntityType::class, [
                 'label' => 'Etat',
                 'class' => Etat::class,
                 'choice_label' => 'libelle',
                 'placeholder' => '--Choisir un état--'
             ])
+            ->add('lieu', LieuType::class)
         ;
     }
+
 
     public function configureOptions(OptionsResolver $resolver)
     {

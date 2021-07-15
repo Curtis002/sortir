@@ -9,8 +9,10 @@ use App\Entity\Lieu;
 use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Form\CreateSortieType;
+use App\Form\LieuType;
 use App\Form\SearchType;
 use App\Repository\SortieRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -77,23 +79,14 @@ class SortieController extends AbstractController
     ): Response
     {
         $sortie = new Sortie();
+
         $sortie->setDateHeureDebut(new \DateTime());
         $organisateur = $this->getUser()->getId();
         $sortie->setOrganisateur($this->entityManager->getRepository(Participant::class)->findOneById($organisateur));
         $campus = $this->getUser()->getCampus();
         $sortie->setCampus($this->entityManager->getRepository(Campus::class)->findOneById($campus));
 
-
-
         $sortieForm = $this->createForm(CreateSortieType::class, $sortie);
-
-//        if ($sortieForm['lieu']) {
-//            dd($sortieForm['lieu']);
-//            $lieu = $sortie->getLieu();
-//
-//            $rue = $this->entityManager->getRepository(Lieu::class)->findOneById($lieu);
-//            dd($rue);
-//        }
 
         $sortieForm->handleRequest($request);
 
@@ -103,12 +96,13 @@ class SortieController extends AbstractController
             $entityManager->persist($sortie);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Félicitation, votre sortie a été créée !!');
         }
+
 
         return $this->render('sortie/create.html.twig'
         , [
-                  'sortieForm' => $sortieForm->createView()
+                'sortieForm' => $sortieForm->createView(),
+
         ]);
     }
 
