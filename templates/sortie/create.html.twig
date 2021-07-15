@@ -5,10 +5,35 @@
 {% block body %}
     <h1 class="text-center mt-3 mb-5">Nouvelle sortie</h1>
     <div class="container">
+        {{ form_start(sortieForm) }}
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(sortieForm.nom) }}
+                {{ form_row(sortieForm.dateHeureDebut) }}
+                {{ form_row(sortieForm.dateLimiteInscription) }}
+                {{ form_row(sortieForm.nbInscriptionsMax) }}
+                {{ form_row(sortieForm.duree) }}
+                {{ form_row(sortieForm.infosSortie) }}
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <div class="col-auto">
+                        <label for="campus" class="col-form-label">Campus</label>
+                    </div>
+                    <div class="col-auto">
+                        <input type="text" id="campus" class="form-control ml-2"  value="{{ app.user.campus }}" disabled>
+                    </div>
+                </div>
+                {{ form_row(sortieForm.ville) }}
+                {{ form_row(sortieForm.lieu) }}
+                {% if sortieForm.lieu %}
+
+                {% endif %}
+                {{ form_row(sortieForm.etatSortie) }}
+            </div>
+        </div>
         <div>
-            {{ form_start(sortieForm) }}
-                {{ form_widget(sortieForm) }}
-                <button type="submit" class="btn btn-info">Créer</button>
+            <button type="submit" class="btn btn-info">Créer</button>
             {{ form_end(sortieForm) }}
         </div>
     </div>
