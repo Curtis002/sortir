@@ -29,13 +29,19 @@
                         <td>{{ sortie.nom }}</td>
                         <td>{{ sortie.dateHeureDebut|format_datetime('short', 'none', locale='en') }}</td>
                         <td>{{ sortie.dateHeureDebut|format_datetime('short', 'none', locale='en') }}</td>
-                        <td>{{ sortie.nbInscriptionsMax }}</td>
-                    {#   <td>{{ sortie.etatSortie}}</td> #}
-                        <td>TODO</td>
+                        <td>{{ sortie.nbInscriptionsRest }} / {{ sortie.nbInscriptionsMax }}</td>
+                        <td>{{ sortie.etatsortie.libelle }}</td>
+                        {# <td>{{ todo "est inscrit" }}</td> #}
 
                         <td><a href="{{ path('sortie_detail', {'id': sortie.id}) }}">Afficher</a></td>
-                        {# {{ sortie.organisateur.pseudo }}</td> #}<td>
-                        <td><a href="{{ path('sortie_join', {'id' : sortie.id}) }}">S'inscrire</a></td>
+                        <td><a href="#">{{ sortie.organisateur.pseudo }}</a></td>
+
+                        <td>
+                            <a href="{{ path('sortie_join', {'id' : sortie.id}) }}">S'inscrire</a>
+                            {# if todo si inscrit #}
+                            <a href="{{ path('sortie_escape', {'id' : sortie.id}) }}">Se désister</a>
+                            {# endif #}
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>

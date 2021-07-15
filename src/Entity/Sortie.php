@@ -55,6 +55,8 @@ class Sortie
      */
     private $nbInscriptionsMax;
 
+    private $nbInscriptionsRest;
+
     /**
      * @ORM\Column(type="text")
      */
@@ -164,6 +166,18 @@ class Sortie
         return $this;
     }
 
+    public function getNbInscriptionsRest(): ?int
+    {
+        return $this->nbInscriptionsRest;
+    }
+
+    public function setNbInscriptionsRest(int $nbInscriptionsRest): self
+    {
+        $this->nbInscriptionsRest = $nbInscriptionsRest;
+
+        return $this;
+    }
+
     public function getInfosSortie(): ?string
     {
         return $this->infosSortie;
@@ -262,4 +276,5 @@ class Sortie
 
         return $this;
     }
+
 }
