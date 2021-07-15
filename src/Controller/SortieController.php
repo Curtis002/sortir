@@ -4,6 +4,9 @@
 namespace App\Controller;
 
 use App\Data\SearchData;
+use App\Entity\Campus;
+use App\Entity\Lieu;
+use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Form\CreateSortieType;
 use App\Form\SearchType;
@@ -75,9 +78,25 @@ class SortieController extends AbstractController
     {
         $sortie = new Sortie();
         $sortie->setDateHeureDebut(new \DateTime());
+        $organisateur = $this->getUser()->getId();
+        $sortie->setOrganisateur($this->entityManager->getRepository(Participant::class)->findOneById($organisateur));
+        $campus = $this->getUser()->getCampus();
+        $sortie->setCampus($this->entityManager->getRepository(Campus::class)->findOneById($campus));
+
+
 
         $sortieForm = $this->createForm(CreateSortieType::class, $sortie);
+
+//        if ($sortieForm['lieu']) {
+//            dd($sortieForm['lieu']);
+//            $lieu = $sortie->getLieu();
+//
+//            $rue = $this->entityManager->getRepository(Lieu::class)->findOneById($lieu);
+//            dd($rue);
+//        }
+
         $sortieForm->handleRequest($request);
+
 
         if($sortieForm->isSubmitted() && $sortieForm->isValid())
         {
