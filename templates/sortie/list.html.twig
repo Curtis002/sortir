@@ -31,8 +31,8 @@
                         <td>{{ sortie.dateHeureDebut|format_datetime('short', 'none', locale='en') }}</td>
                         <td>{{ sortie.nbInscriptionsRest }} / {{ sortie.nbInscriptionsMax }}</td>
                         <td>{{ sortie.etatsortie.libelle }}</td>
-                        {# <td>{{ todo "est inscrit" }}</td> #}
-
+                        <td> todo "est inscrit" </td>
+                        <td><a href="{{ path('participant_show', {'id': sortie.organisateur.id }) }}">{{ sortie.organisateur.nom }}</a></td>
                         <td><a href="{{ path('sortie_detail', {'id': sortie.id}) }}">Afficher</a></td>
                         <td><a href="#">{{ sortie.organisateur.pseudo }}</a></td>
 
