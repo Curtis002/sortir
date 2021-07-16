@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Data\SearchDataAdmin;
 use App\Entity\Ville;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,6 +22,19 @@ class VilleRepository extends ServiceEntityRepository
         parent::__construct($registry, Ville::class);
     }
 
+    public function findSearch(SearchDataAdmin $search): array
+    {
+        $query = $this
+            ->createQueryBuilder('v');
+        if(!empty($search->q))
+        {
+            $query = $query
+                ->andWhere('v.nom LIKE :q')
+                ->orWhere('v.codePostal LIKE :q')
+                ->setParameter('q', "%{$search->q}%");
+        }
+        return $query->getQuery()->getResult();
+    }
 
 
     // /**
@@ -51,4 +65,5 @@ class VilleRepository extends ServiceEntityRepository
         ;
     }
     */
+
 }

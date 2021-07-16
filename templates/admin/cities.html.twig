@@ -5,6 +5,18 @@
 {% block body %}
 <h1 class="text-center mt-3 mb-5">Villes</h1>
     <div class="container">
+        {{ form_start(form) }}
+        <div class="row justify-content-md-center">
+            <div class="col-4">
+                {{ form_row(form.q) }}
+            </div>
+            <div class="col-xs-6">
+                <button type="submit" class="btn btn-info" name="recherche">Rechercher</button>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+    <div class="container">
         <div>
             <table class="table">
                 <thead>
@@ -15,13 +27,23 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for ville in cities %}
-                    <tr>
-                        <td>{{ ville.nom }}</td>
-                        <td>{{ ville.codePostal }} </td>
-                        <td><a href="{{ path('city_update', {"id" : ville.id}) }}">Modifier</a> | <a href="{{ path('city_delete', {"id" : ville.id}) }}" onclick="return confirm('Supprimer?')">Supprimer</a></td>
-                    </tr>
-                {% endfor %}
+
+                    {% for ville in vil %}
+                        <tr>
+                            <td>{{ ville.nom }}</td>
+                            <td>{{ ville.codePostal }} </td>
+                            <td><a href="{{ path('city_update', {"id" : ville.id}) }}">Modifier</a> | <a href="{{ path('city_delete', {"id" : ville.id}) }}" onclick="return confirm('Supprimer?')">Supprimer</a></td>
+                        </tr>
+                    {% endfor %}
+
+                  {#  {% for ville in cities %}
+                        <tr>
+                            <td>{{ ville.nom }}</td>
+                            <td>{{ ville.codePostal }} </td>
+                            <td><a href="{{ path('city_update', {"id" : ville.id}) }}">Modifier</a> | <a href="{{ path('city_delete', {"id" : ville.id}) }}" onclick="return confirm('Supprimer?')">Supprimer</a></td>
+                        </tr>
+                    {% endfor %}#}
+
                 </tbody>
             </table>
         </div>
