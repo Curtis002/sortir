@@ -25,10 +25,10 @@
 
                  {% if is_granted("ROLE_ADMIN") %}
                      <li class="nav-item">
-                         <a class="nav-link" href="" title="cities">Ajout d'un lieu</a>
+                         <a class="nav-link" href="" title="lieux">Lieux</a>
                      </li>
                      <li class="nav-item">
-                         <a class="nav-link" href="{{ path('city_create') }}" title="cities">Ajout d'une ville</a>
+                         <a class="nav-link" href="{{ path('city_list') }}" title="cities">Villes</a>
                      </li>
                  {% endif %}
 
