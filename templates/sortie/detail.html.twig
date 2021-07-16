@@ -2,41 +2,64 @@
 
 {% block body %}
     <div class="container">
-        <h1>Détails de la sortie {{ sorties.nom }}</h1>
-        <div class="row">
-            <div class="col-sm">
-                <div>Date et heure de la sortie {{ sorties.dateHeureDebut|format_datetime('short', 'none', locale='fr') }}</div>
-                <div>Date limite d'inscription {{ sorties.dateLimiteInscription|format_datetime('short', 'none', locale='fr') }}</div>
-                <div>Nombre de place {{ sorties.nbInscriptionsMax }}</div>
-                <div>Durée {{ sorties.duree }}</div>
-                <div>Description et infos {{ sorties.infosSortie }}</div>
+        <h1 class="text-center mt-3 mb-5">{{ sorties.nom }}</h1>
+        <div class="row mb-5">
+            <div class="col-md-6">
+                <h4 class="mb-3">Infos pratiques :</h4>
+                <div class="card" >
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Date et heure de la sortie : {{ sorties.dateHeureDebut|format_datetime('short', 'none', locale='fr') }}</li>
+                        <li class="list-group-item">Date limite d'inscription : {{ sorties.dateLimiteInscription|format_datetime('short', 'none', locale='fr') }}</li>
+                        <li class="list-group-item">Nombre de places : {{ sorties.nbInscriptionsMax }}</li>
+                        <li class="list-group-item">Durée : {{ sorties.duree }}</li>
+                        <li class="list-group-item">Campus : {{ sorties.campus.nom }}</li>
+
+                    </ul>
+                </div>
             </div>
-            <div class="col-sm">
-                <div>Campus {{ sorties.campus }}</div>
-                <div>Lieu {{ sorties.lieu }}</div>
-                <div>Rue {{ sorties.lieu }}</div>
-{#                <div>Code postal {{ ville.codePostal }}</div>#}
-                <div>Latitude {{ sorties.lieu.latitude }}</div>
-                <div>Longitude {{ sorties.lieu }}</div>
+            <div class="col-md-6">
+                <h4 class="mb-3">Adresse :</h4>
+                     <div class="card" >
+                         <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Lieu : {{ sorties.lieu }}</li>
+                            <li class="list-group-item">Rue : {{ sorties.lieu.rue }}</li>
+                            <li class="list-group-item">Code postal : {{ sorties.lieu.ville.codePostal }}</li>
+                            <li class="list-group-item">Ville : {{ sorties.lieu.ville }}</li>
+{#                <div>Latitude {{ sorties.lieu.latitude }}</div>#}
+{#                <div>Longitude {{ sorties.lieu.longitude }}</div>#}
+                         </ul>
+                    </div>
             </div>
         </div>
-        <div>Liste des participants</div>
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">Pseudo</th>
-                <th scope="col">Nom</th>
-            </tr>
-            </thead>
-                <tbody>
-                <tr>
-                    <td>{{ sortie.participants }}</td>
-                    <td>{{ sortie.participants }}</td>
-                </tr>
-                </tbody>
-        </table>
-    </div>
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <h4 class="mb-3">Description :</h4>
+                </div>
 
+                <div class="col-md-12">{{ sorties.infosSortie }}</div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-md-12">
+                    <h4 class="mb-3">Liste des participants</h4>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Pseudo</th>
+                            <th scope="col">Nom</th>
+                        </tr>
+                        </thead>
+                        {% for p in sorties.participants %}
+                            <tbody>
+                            <tr>
+                                <td><a href="{{ path('participant_show', {'id': p.id }) }}">{{ p.pseudo }}</a></td>
+                                <td>{{ p.nom }}</td>
+                            </tr>
+                            </tbody>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
 
 {% endblock %}
 

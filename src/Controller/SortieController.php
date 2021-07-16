@@ -9,6 +9,7 @@ use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Entity\Ville;
 use App\Form\CreateSortieType;
+use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,9 +32,9 @@ class SortieController extends AbstractController
     /**
      * @Route("/", name="list")
      */
-    public function list()
+    public function list(SortieRepository $sortieRepository)
     {
-        $sorties = $this->entityManager->getRepository(Sortie::class)->findAll();
+        $sorties = $sortieRepository->findAll();
 
         return $this->render('sortie/list.html.twig', [
             'sorties' => $sorties,
@@ -60,6 +61,7 @@ class SortieController extends AbstractController
     public function detail(int $id, SortieRepository $sortieRepository): Response
     {
         $sorties = $sortieRepository->find($id);
+        //$participants = $sortieRepository->getParticipantsSortie($id);
 
         return $this->render('sortie/detail.html.twig', [
             "sorties"=>$sorties
