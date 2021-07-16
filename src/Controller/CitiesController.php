@@ -38,10 +38,10 @@ class CitiesController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Votre ville a été ajouté avec succès!');
+            return $this->redirectToRoute("city_list");
         }
 
-        return $this->render('admin/cities.html.twig'
-            , [
+        return $this->render('admin/cities.html.twig', [
                 'cities' => $cities,
                 'cityForm' => $cityForm->createView()
             ]);
@@ -59,6 +59,7 @@ class CitiesController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->flush();
 
+            $this->addFlash('success', 'Votre ville a été modifié avec succès!');
             return $this->redirectToRoute("city_list");
         }
         return $this->render('admin/updateCity.html.twig', [

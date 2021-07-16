@@ -34,10 +34,10 @@ class CampusController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Votre campus a été ajouté avec succès!');
+            return $this->redirectToRoute("campus_list");
         }
 
-        return $this->render('admin/campus.html.twig'
-            , [
+        return $this->render('admin/campus.html.twig', [
                 'allCampus' => $allCampus,
                 'campForm' => $campForm->createView()
             ]);
@@ -56,6 +56,7 @@ class CampusController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->flush();
 
+            $this->addFlash('success', 'Votre campus a été modifié avec succès!');
             return $this->redirectToRoute("campus_list");
         }
         return $this->render('admin/updateCampus.html.twig', [
