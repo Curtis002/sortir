@@ -3,17 +3,13 @@
 
 namespace App\Controller;
 
-use App\Data\SearchData;
 use App\Entity\Campus;
 use App\Entity\Lieu;
 use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Entity\Ville;
 use App\Form\CreateSortieType;
-use App\Form\LieuType;
-use App\Form\SearchType;
 use App\Repository\SortieRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,7 +36,7 @@ class SortieController extends AbstractController
         $sorties = $this->entityManager->getRepository(Sortie::class)->findAll();
 
         return $this->render('sortie/list.html.twig', [
-            'sorties' => $sorties
+            'sorties' => $sorties,
         ]);
 
 //        $data = new SearchData();
