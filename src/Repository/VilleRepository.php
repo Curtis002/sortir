@@ -4,7 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Ville;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @method Ville|null find($id, $lockMode = null, $lockVersion = null)
@@ -18,6 +20,8 @@ class VilleRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Ville::class);
     }
+
+
 
     // /**
     //  * @return Ville[] Returns an array of Ville objects

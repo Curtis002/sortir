@@ -19,7 +19,7 @@
                     <tr>
                         <td>{{ ville.nom }}</td>
                         <td>{{ ville.codePostal }} </td>
-                        <td><a href="">Modifier</a> | <a href="">Supprimer</a></td>
+                        <td><a href="{{ path('city_update', {"id" : ville.id}) }}">Modifier</a> | <a href="{{ path('city_delete', {"id" : ville.id}) }}" onclick="return confirm('Supprimer?')">Supprimer</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>
