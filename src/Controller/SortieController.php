@@ -3,6 +3,7 @@
 
 namespace App\Controller;
 
+use App\Data\SearchData;
 use App\Entity\Campus;
 use App\Entity\Etat;
 use App\Entity\Lieu;
@@ -10,6 +11,7 @@ use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Entity\Ville;
 use App\Form\CreateSortieType;
+use App\Form\SearchType;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,30 +31,33 @@ class SortieController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
+//    /**
+//     * @Route("/", name="list")
+//     */
+//    public function list()
+//    {
+//        $sorties = $this->entityManager->getRepository(Sortie::class)->findAll();
+//
+//        return $this->render('sortie/list.html.twig', [
+//            'sorties' => $sorties,
+//        ]);
+//
+//    }
+
     /**
      * @Route("/", name="list")
      */
-    public function list()
+    public function list(SortieRepository $sortieRepository, Request $request)
     {
-        $sorties = $this->entityManager->getRepository(Sortie::class)->findAll();
+        $data = new SearchData();
+        $sortieForm = $this->createForm(SearchType::class, $data);
+        $sortieForm->handleRequest($request);
+        $sorties = $sortieRepository->findSearch($data);
 
         return $this->render('sortie/list.html.twig', [
-            'sorties' => $sorties,
+            'sorties'=>$sorties,
+            'sortiesForm'=>$sortieForm->createView()
         ]);
-
-//        $data = new SearchData();
-//        $data->page = $request->get('page', 1);
-//
-//        $sortieForm = $this->createForm(SearchType::class, $data);
-//
-//        $sortieForm->handleRequest($request);
-//
-//        $sorties = $sortieRepository->findSearch($data);
-//
-//        return $this->render('sortie/list.html.twig', [
-//            'sorties'=>$sorties,
-//            'sortiesForm'=>$sortieForm->createView()
-//        ]);
     }
 
     /**
