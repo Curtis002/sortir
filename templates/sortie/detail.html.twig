@@ -1,48 +1,65 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
+    <h1 class="text-center mt-3 mb-5">Détails de la sortie {{ sorties.nom }}</h1>
     <div class="container">
-        <h1>Détails de la sortie {{ sorties.nom }}</h1>
         <div class="row">
             <div class="col-sm">
-                <div>Date et heure de la sortie {{ sorties.dateHeureDebut|format_datetime('short', 'none', locale='fr') }}</div>
-                <div>Date limite d'inscription {{ sorties.dateLimiteInscription|format_datetime('short', 'none', locale='fr') }}</div>
-                <div>Nombre de place {{ sorties.nbInscriptionsMax }}</div>
-                <div>Durée {{ sorties.duree }}</div>
-                <div>Description et infos {{ sorties.infosSortie }}</div>
+                <h5>Date et heure de la sortie</h5>
+                <h5>Date limite d'inscription</h5>
+                <h5>Nombre de place</h5>
+                <h5>Durée</h5>
+                <h5>Description et infos</h5>
             </div>
             <div class="col-sm">
-                <div>Campus {{ sorties.campus.nom }}</div>
-                <div>Lieu {{ sorties.lieu }}</div>
-                <div>Rue {{ sorties.lieu }}</div>
-                <div>Code postal {{ sorties.lieu.ville.codePostal }}</div>
-                <div>Latitude {{ sorties.lieu.latitude }}</div>
-                <div>Longitude {{ sorties.lieu }}</div>
+                <div>{{ sorties.dateHeureDebut|format_datetime('short', 'none', locale='fr') }}</div>
+                <div>{{ sorties.dateLimiteInscription|format_datetime('short', 'none', locale='fr') }}</div>
+                <div>{{ sorties.nbInscriptionsMax }}</div>
+                <div>{{ sorties.duree }}</div>
+                <div>{{ sorties.infosSortie }}</div>
+            </div>
+            <div class="col-sm">
+                <h5>Campus</h5>
+                <h5>Lieu</h5>
+                <h5>Rue</h5>
+                <h5>Code postal</h5>
+                <h5>Latitude</h5>
+                <h5>Longitude</h5>
+            </div>
+            <div class="col-sm">
+                <div>{{ sorties.campus.nom }}</div>
+                <div>{{ sorties.lieu }}</div>
+                <div>{{ sorties.lieu }}</div>
+                <div>{{ sorties.lieu.ville.codePostal }}</div>
+                <div>{{ sorties.lieu.latitude }}</div>
+                <div>{{ sorties.lieu }}</div>
             </div>
         </div>
-        <div>Liste des participants</div>
-        <table class="table">
-            <thead>
+    </div>
+    <h5>Liste des participants</h5>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Pseudo</th>
+            <th scope="col">Nom</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for participant in sorties.participants %}
             <tr>
-                <th scope="col">Pseudo</th>
-                <th scope="col">Nom</th>
+                <td>{{ participant.pseudo }}</td>
+                <td>{{ participant.nom }}</td>
             </tr>
-            </thead>
-                <tbody>
-                {% for participant in sorties.participants %}
-                <tr>
-                    <td>{{ participant.pseudo }}</td>
-                    <td>{{ participant.nom }}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-        </table>
+        {% endfor %}
+        </tbody>
+    </table>
     </div>
 
 
 {% endblock %}
 
-{% block title %}
-    {{ parent() }}
-{% endblock %}
+    {% block title %}
+        {{ parent() }}
+    {% endblock %}
 
