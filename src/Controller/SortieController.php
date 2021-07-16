@@ -165,7 +165,7 @@ class SortieController extends AbstractController
             $message = "Vous etes déjà inscrit à cette sortie (". $sortie->getNom() . ").";
             $this->addFlash('dejainscrit', $message);
         }
-        elseif ($sortie->getEtatSortie()->getId() == 2 and ( $sortie->getNbInscriptionsMax()-1 == $sortie->getParticipants()->count()))
+        elseif ($sortie->getEtatSortie()->getId() == 2 and  $sortie->getNbInscriptionsMax()-1 == $sortie->getParticipants()->count() )
         {
             $sortie->addParticipant($userconnecte);
             $sortie->setEtatSortie($etat);
