@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Data\SearchDataAdmin;
 use App\Entity\Campus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -17,6 +18,19 @@ class CampusRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Campus::class);
+    }
+
+    public function findSearch(SearchDataAdmin $search): array
+    {
+        $query = $this
+            ->createQueryBuilder('c');
+        if(!empty($search->q))
+        {
+            $query = $query
+                ->andWhere('c.nom LIKE :q')
+                ->setParameter('q', "%{$search->q}%");
+        }
+        return $query->getQuery()->getResult();
     }
 
     // /**

@@ -3,8 +3,12 @@
 
 namespace App\Controller;
 
+use App\Data\SearchData;
+use App\Data\SearchDataAdmin;
 use App\Entity\Campus;
 use App\Form\CreateCampusType;
+use App\Form\SearchDataType;
+use App\Form\SearchType;
 use App\Repository\CampusRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,6 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CampusController extends AbstractController
 {
+
     /**
      * @Route("/campus", name="campus_list")
      */
@@ -37,9 +42,16 @@ class CampusController extends AbstractController
             return $this->redirectToRoute("campus_list");
         }
 
+        $data = new SearchDataAdmin();
+        $form = $this->createForm(SearchDataType::class, $data);
+        $form->handleRequest($request);
+        $camps = $campusRepository->findSearch($data);
+
         return $this->render('admin/campus.html.twig', [
                 'allCampus' => $allCampus,
-                'campForm' => $campForm->createView()
+                'campForm' => $campForm->createView(),
+                'camps' => $camps,
+                'form' => $form->createView()
             ]);
     }
 
@@ -75,5 +87,20 @@ class CampusController extends AbstractController
 
         return $this->redirectToRoute("campus_list");
     }
+
+//    /**
+//     * @Route("/campus", name="campus_list")
+//     */
+//   public function index(CampusRepository $campusRepository): Response
+//    {
+//        $data = new SearchData();
+//        $form = $this->createForm(SearchType::class, $data);
+//        $camps = $campusRepository->findSearch();
+//        return $this->render('admin/campus.html.twig', [
+//            'camps' => $camps,
+//            'form' => $form->createView()
+//        ]);
+//    }
+
 }
 

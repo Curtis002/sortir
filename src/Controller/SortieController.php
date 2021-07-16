@@ -3,13 +3,16 @@
 
 namespace App\Controller;
 
+use App\Data\SearchData;
 use App\Entity\Campus;
+use App\Entity\Etat;
 use App\Entity\Lieu;
 use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Entity\Ville;
 use App\Form\CreateSortieType;
 use App\Repository\ParticipantRepository;
+use App\Form\SearchType;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,27 +35,29 @@ class SortieController extends AbstractController
     /**
      * @Route("/", name="list")
      */
-    public function list(SortieRepository $sortieRepository)
+   /* public function list(SortieRepository $sortieRepository)
     {
         $sorties = $sortieRepository->findAll();
 
         return $this->render('sortie/list.html.twig', [
             'sorties' => $sorties,
         ]);
+    }*/
 
-//        $data = new SearchData();
-//        $data->page = $request->get('page', 1);
-//
-//        $sortieForm = $this->createForm(SearchType::class, $data);
-//
-//        $sortieForm->handleRequest($request);
-//
-//        $sorties = $sortieRepository->findSearch($data);
-//
-//        return $this->render('sortie/list.html.twig', [
-//            'sorties'=>$sorties,
-//            'sortiesForm'=>$sortieForm->createView()
-//        ]);
+    /**
+     * @Route("/", name="list")
+     */
+    public function list(SortieRepository $sortieRepository, Request $request)
+    {
+        $data = new SearchData();
+        $sortieForm = $this->createForm(SearchType::class, $data);
+        $sortieForm->handleRequest($request);
+        $sorties = $sortieRepository->findSearch($data);
+
+        return $this->render('sortie/list.html.twig', [
+            'sorties'=>$sorties,
+            'sortiesForm'=>$sortieForm->createView()
+        ]);
     }
 
     /**
@@ -61,7 +66,6 @@ class SortieController extends AbstractController
     public function detail(int $id, SortieRepository $sortieRepository): Response
     {
         $sorties = $sortieRepository->find($id);
-        //$participants = $sortieRepository->getParticipantsSortie($id);
 
         return $this->render('sortie/detail.html.twig', [
             "sorties"=>$sorties
@@ -137,6 +141,8 @@ class SortieController extends AbstractController
 
         $sortierepo = $entityManager->getRepository(Sortie::class);
         $id_sortie = $sortie->getId();
+        $etatrepo = $entityManager->getRepository(Etat::class);
+        $etat = $etatrepo->find(3);
 
         $sortie = $sortierepo->find($id_sortie);
         // sort bien l objet sortie cliquée av son id
@@ -148,45 +154,34 @@ class SortieController extends AbstractController
         {
             $message = "Inscription à cette sortie (". $sortie->getNom() .") clôturée !.";
             $this->addFlash('cloturee', $message);
-            //$sortie->setEtatSortie("Cloturée");
-            /*return $this->redirectToRoute('sortie_list', [
-                "message" => $message,
-                "entities" => $sorties,
-            ]);*/
         }
 
         elseif ( $sortie->getNbInscriptionsMax() == $sortie->getParticipants()->count()) {
             $message = "Nombre de participants max atteint pour cette sortie (" . $sortie->getNom() . ").";
             $this->addFlash('maxatteint', $message);
-
-
-            /*return $this->redirectToRoute('sortie_list', [
-                "message" => $message,
-                "entities" => $sorties,
-            ]);*/
         }
         elseif ($sortie->getParticipants()->contains($userconnecte))
         {
             $message = "Vous etes déjà inscrit à cette sortie (". $sortie->getNom() . ").";
             $this->addFlash('dejainscrit', $message);
-            /*return $this->redirectToRoute('sortie_list', [
-                "message" => $message,
-                "entities" => $sorties,
-            ]);*/
         }
-        elseif ($sortie->getEtatSortie()->getId() == 2)
+        elseif ($sortie->getEtatSortie()->getId() == 2 and  $sortie->getNbInscriptionsMax()-1 == $sortie->getParticipants()->count() )
         {
-
             $sortie->addParticipant($userconnecte);
-            //dd($sortie->setEtat("Cloturée"));
-            //$sortie->setEtatSortie($sortie->getEtat());
-            $entityManager->persist($sortie);
+            $sortie->setEtatSortie($etat);
 
+            $entityManager->persist($sortie);
             $entityManager->flush();
             $this->addFlash('joinsucces', "Vous avez réussi votre inscription à la sortie \" " .$sortie->getNom() . "\" ! ");
-
-
         }
+    elseif ($sortie->getEtatSortie()->getId() == 2 )
+        {
+        $sortie->addParticipant($userconnecte);
+
+        $entityManager->persist($sortie);
+        $entityManager->flush();
+        $this->addFlash('joinsucces', "Vous avez réussi votre inscription à la sortie \" " .$sortie->getNom() . "\" ! ");
+    }
 
         //todo penser a retourner vers la sortie surlaquelle on viens de s'inscrire ??
         return $this->redirectToRoute('sortie_list', [
@@ -212,27 +207,44 @@ class SortieController extends AbstractController
         $sortierepo = $entityManager->getRepository(Sortie::class);
         $id_sortie = $sortie->getId();
 
+        $etatrepo = $entityManager->getRepository(Etat::class);
+        $etat = $etatrepo->find(2);
+
+
         $sortie = $sortierepo->find($id_sortie);
         // sort bien l objet sortie cliquée av son id
 
         $sorties = $sortierepo->findAll();
 
-        if ($sortie->getParticipants()->contains($userconnecte) )
+        if ( $sortie->getParticipants()->contains($userconnecte) and $sortie->getEtatSortie()->getId() == 3 and date("now") < $sortie->getDateLimiteInscription())
         {
+
             $sortie->removeParticipant($userconnecte);
+
+            $sortie->setEtatSortie($etat);
+
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            $message = "Vous vous etes bien desinscrit a la sortie (". $sortie->getNom() . ").";
+            $this->addFlash('deinscrit', $message);
+        }elseif ($sortie->getParticipants()->contains($userconnecte) and $sortie->getEtatSortie()->getId() == 2)
+        {
+
+            $sortie->removeParticipant($userconnecte);
+
             $entityManager->refresh($sortie);
             $entityManager->flush();
 
-        $message = "Vous vous etes bien desinscrit a la sortie (". $sortie->getNom() . ").";
-        $this->addFlash('dejaInscrit', $message);
+            $message = "Vous vous etes bien desinscrit a la sortie (". $sortie->getNom() . ").";
+            $this->addFlash('deinscrit', $message);
+
+        }
+
         return $this->redirectToRoute('sortie_list', [
             "message" => $message,
             "entities" => $sorties,
         ]);
-    }else
-
-        return $this->redirectToRoute('sortie_list', [
-            'sorties' => $sorties]);
 
     }
 

@@ -3,12 +3,12 @@
 
 namespace App\Controller;
 
+use App\Data\SearchDataAdmin;
 use App\Entity\Ville;
 use App\Form\CreateCityType;
+use App\Form\SearchDataType;
 use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\QueryBuilder;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,9 +41,16 @@ class CitiesController extends AbstractController
             return $this->redirectToRoute("city_list");
         }
 
+        $data = new SearchDataAdmin();
+        $form = $this->createForm(SearchDataType::class, $data);
+        $form->handleRequest($request);
+        $vil = $villeRepository->findSearch($data);
+
         return $this->render('admin/cities.html.twig', [
                 'cities' => $cities,
-                'cityForm' => $cityForm->createView()
+                'cityForm' => $cityForm->createView(),
+                'vil' => $vil,
+                'form' => $form->createView()
             ]);
     }
 
