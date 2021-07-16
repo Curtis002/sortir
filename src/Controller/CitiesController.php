@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CitiesController extends AbstractController
 {
     /**
-     * @Route("", name="city_list")
+     * @Route("/city", name="city_list")
      */
     public function list(VilleRepository $villeRepository,
                          Request $request,

@@ -57,10 +57,10 @@ class SortieController extends AbstractController
      */
     public function detail(int $id, SortieRepository $sortieRepository): Response
     {
-        $sorties = $sortieRepository->find($id);
+        $sortie = $sortieRepository->find($id);
 
         return $this->render('sortie/detail.html.twig', [
-            "sorties"=>$sorties
+            "sortie"=>$sortie
         ]);
     }
 
