@@ -9,6 +9,7 @@ use App\Entity\Sortie;
 use App\Entity\Ville;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -63,7 +64,11 @@ class CreateSortieType extends AbstractType
                 'choice_label' => 'libelle',
                 'placeholder' => '--Choisir un état--'
             ])
-            ->add('lieu', LieuType::class)
+            ->add('lieux', CollectionType::class, [
+                'entry_type' => LieuType::class,
+                'entry_options' => ['label' => false],
+                'required' => false
+            ])
         ;
     }
 

@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 
+
 {% block title %} Creation d'une nouvelle sortie {% endblock %}
 
 {% block body %}
@@ -17,26 +18,51 @@
             </div>
             <div class="col-md-6">
                 <div class="row">
-                    <div class="col-auto">
-                        <label for="campus" class="col-form-label mr-3">Campus</label>
+                    <div class="col-md-2">
+                        <label for="campus" class="col-form-label">Campus</label>
                     </div>
-                    <div class="mb-3">
-                        <input type="text" id="campus" class="form-control ml-2"  value="{{ app.user.campus }}" disabled>
+                    <div class="col-md-10 mb-3">
+                        <input type="text" id="campus" class="form-control"  value="{{ app.user.campus }}" disabled>
                     </div>
                 </div>
-                <div >
-                    {{ form_row(sortieForm.lieuSortie) }}
-                    {{ form_row((sortieForm.ville)) }}
-                    {{ form_row(sortieForm.lieu.rue) }}
-                    {{ form_row(sortieForm.lieu.codePostal) }}
+                    <div class="div-hide">{{ form_row(sortieForm.ville) }}</div>
+                <div class="row">
+                    <div class="col-md-11 custom-input">
+                        {{ form_row(sortieForm.lieuSortie) }}
+                    </div>
+                    <div class="x-button col-md-1">
+                        <a href="#" id="toggler"><img src="{{ asset('img/icons-plus.png') }}" alt="ajouter lieu" style="margin-top: 7px" ></a>
+                    </div>
+                </div>
+                    <div class="row" id="toggle">
+                        <div class="col-md-12">
+                            {% for lieu in sortieForm.lieux %}
+                            {{ form_row(lieu.nom) }}
+                            {{ form_row(lieu.rue) }}
+                            {{ form_row(lieu.ville) }}
+                            {% endfor %}
+                        </div>
+                    </div>
                     {{ form_row(sortieForm.etatSortie) }}
-                </div>
             </div>
         </div>
         <div class="d-flex justify-content-center">
-            <button type="submit" class="btn btn-info">Créer</button>
+            <button type="submit" class="btn btn-info mb-3">Créer</button>
         </div>
         {{ form_end(sortieForm) }}
     </div>
+    <script>
+        jQuery(document).ready(function()
+        {
+            // On cache la zone de texte
+            jQuery('#toggle').hide();
+            // toggle() lorsque le lien avec l'ID #toggler est cliqué
+            jQuery('a#toggler').click(function()
+            {
+                jQuery('#toggle').toggle(400);
+                return false;
+            });
+        });
+    </script>
 {% endblock %}
 

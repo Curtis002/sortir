@@ -8,6 +8,7 @@ use App\Entity\Campus;
 use App\Entity\Lieu;
 use App\Entity\Participant;
 use App\Entity\Sortie;
+use App\Entity\Ville;
 use App\Form\CreateSortieType;
 use App\Form\LieuType;
 use App\Form\SearchType;
@@ -80,6 +81,9 @@ class SortieController extends AbstractController
     {
         $sortie = new Sortie();
 
+        $lieu1 = new Lieu();
+        $sortie->getLieux()->add($lieu1);
+
         $sortie->setDateHeureDebut(new \DateTime());
         $organisateur = $this->getUser()->getId();
         $sortie->setOrganisateur($this->entityManager->getRepository(Participant::class)->findOneById($organisateur));
@@ -87,17 +91,26 @@ class SortieController extends AbstractController
         $sortie->setCampus($this->entityManager->getRepository(Campus::class)->findOneById($campus));
 
         $sortieForm = $this->createForm(CreateSortieType::class, $sortie);
-
         $sortieForm->handleRequest($request);
-
 
         if($sortieForm->isSubmitted() && $sortieForm->isValid())
         {
+            // Si lieu existant
+            if ($request->request->get('create_sortie')['lieuSortie'] !== "") {
+                $idLieu = (int)$request->request->get('create_sortie')['lieuSortie'];
+                $lieu1 = $this->entityManager->getRepository(Lieu::class)->findOneById($idLieu);
+            } else {
+                $lieu1->setNom($request->request->get('create_sortie')['lieux'][0]['nom']);
+                $lieu1->setRue($request->request->get('create_sortie')['lieux'][0]['rue']);
+                $idVille = (int)($request->request->get('create_sortie')['ville']);
+                $lieu1->setVille($this->entityManager->getRepository(Ville::class)->findOneById($idVille));
+            }
+            $entityManager->persist($lieu1);
+            $sortie->setLieu($lieu1);
+            dump($sortie);
             $entityManager->persist($sortie);
             $entityManager->flush();
-
         }
-
 
         return $this->render('sortie/create.html.twig'
         , [
