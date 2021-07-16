@@ -31,27 +31,37 @@
                         <td>{{ sortie.dateHeureDebut|format_datetime('short', 'none', locale='en') }}</td>
                         <td>{{ sortie.participants|length }} / {{ sortie.nbInscriptionsMax }}</td>
                         <td>{{ sortie.etatsortie.libelle }}</td>
-                        <td>{% set jesuisinscrit = app.user.id %}
-                        {% if sortie.participants(jesuisinscrit) %}
+                        <td>{% set jesuisinscrit = false %}
+                        {% if sortie.participants.contains(app.user) %}
+                            {% set jesuisinscrit = true %}
                             <input type="checkbox" value="inscrit"   disabled="disabled" checked readonly>
-
-                            {% endif %}
+                        {% endif %}
                         </td>
                         <td><a href="{{ path('participant_show', {'id': sortie.organisateur.id }) }}">{{ sortie.organisateur.nom }}</a></td>
 
                         <td>
-                            {% if sortie.etatsortie.libelle == "Ouverte" %}
-                            <a href="{{ path('sortie_join', {'id' : sortie.id}) }}">S'inscrire</a>
-                            {% endif %}
-                            {% if sortie.participants(jesuisinscrit) %}
+                            {% if sortie.etatsortie.libelle != "En création" %}
                                 <a href="{{ path('sortie_detail', {'id': sortie.id}) }}">Afficher</a>
+                                {% if sortie.participants.contains(app.user) %}
 
-                                {# if sortie.etatsortie.libelle != "" #}
-                                <a href="{{ path('sortie_escape', {'id' : sortie.id}) }}">Se désister</a>
-                                {# endif #}
+                                {% set jesuisinscrit = true %}
+
+                                    {% if sortie.etatsortie.libelle == "Ouverte" and jesuisinscrit == true  %}
+                                        <a href="{{ path('sortie_escape', {'id' : sortie.id}) }}">Se désister</a>
+                                    {% endif %}
+
+                                {% elseif not sortie.participants.contains(app.user) %}
+                                    {% set jesuisinscrit = false %}
+                                    {% if sortie.etatsortie.libelle == "Ouverte" and jesuisinscrit == false  %}
+                                    <a href="{{ path('sortie_join', {'id' : sortie.id}) }}">S'inscrire</a>
+                                    {% endif %}
+                                {% endif %}
+
+                            {% elseif  (sortie.etatsortie.libelle == "En création") %}
+                            {# todo modifier la sortie #}
+                                <a href="#">Modifier</a>
                             {% endif %}
-
-                        </td>
+                                </td>
                     </tr>
                     {% endfor %}
                 </tbody>
