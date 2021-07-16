@@ -31,19 +31,26 @@
                         <td>{{ sortie.dateHeureDebut|format_datetime('short', 'none', locale='en') }}</td>
                         <td>{{ sortie.participants|length }} / {{ sortie.nbInscriptionsMax }}</td>
                         <td>{{ sortie.etatsortie.libelle }}</td>
-                        {# <td>{{ todo "est inscrit" }}</td> #}
+                        <td>{% set jesuisinscrit = app.user.id %}
+                        {% if sortie.participants(jesuisinscrit) %}
+                            <input type="checkbox" value="inscrit"   disabled="disabled" checked readonly>
 
-                        <td><a href="{{ path('sortie_detail', {'id': sortie.id}) }}">Afficher</a></td>
-                        <td><a href="#">{{ sortie.organisateur.pseudo }}</a></td>
+                            {% endif %}
+                        </td>
+                        <td><a href="{{ path('participant_show', {'id': sortie.organisateur.id }) }}">{{ sortie.organisateur.nom }}</a></td>
 
                         <td>
                             {% if sortie.etatsortie.libelle == "Ouverte" %}
                             <a href="{{ path('sortie_join', {'id' : sortie.id}) }}">S'inscrire</a>
                             {% endif %}
+                            {% if sortie.participants(jesuisinscrit) %}
+                                <a href="{{ path('sortie_detail', {'id': sortie.id}) }}">Afficher</a>
 
-                            {# if sortie.etatsortie.libelle != "" #}
-                            <a href="{{ path('sortie_escape', {'id' : sortie.id}) }}">Se désister</a>
-                            {# endif #}
+                                {# if sortie.etatsortie.libelle != "" #}
+                                <a href="{{ path('sortie_escape', {'id' : sortie.id}) }}">Se désister</a>
+                                {# endif #}
+                            {% endif %}
+
                         </td>
                     </tr>
                     {% endfor %}
