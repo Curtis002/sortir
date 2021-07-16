@@ -119,4 +119,120 @@ class SortieController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/join/{id}", name="join")
+     */
+    public function joinSortie( Sortie $sortie,EntityManagerInterface $entityManager): Response
+    {
+        //raz message
+        $message = null;
+
+
+        $userconnecte = $this->getUser();
+        //recup bien l utilisateurconnecte
+
+
+        $sortierepo = $entityManager->getRepository(Sortie::class);
+        $id_sortie = $sortie->getId();
+
+        $sortie = $sortierepo->find($id_sortie);
+        // sort bien l objet sortie cliquée av son id
+
+        $sorties = $sortierepo->findAll();
+        if ($sortie->getEtatSortie()->getId() != 3 )
+        {
+            $message = "Inscription à cette sortie (". $sortie->getNom() .") clôturée !.";
+            $this->addFlash('cloturee', $message);
+
+            /*return $this->redirectToRoute('sortie_list', [
+                "message" => $message,
+                "entities" => $sorties,
+            ]);*/
+        }
+        elseif ( $sortie->getNbInscriptionsMax() == $sortie->getParticipants()->count()) {
+            $message = "Nombre de participants max atteint pour cette sortie (" . $sortie->getNom() . ").";
+            $this->addFlash('maxatteint', $message);
+            /*return $this->redirectToRoute('sortie_list', [
+                "message" => $message,
+                "entities" => $sorties,
+            ]);*/
+        }
+        elseif ($sortie->getParticipants()->contains($userconnecte))
+        {
+            $message = "Vous etes déjà inscrit à cette sortie (". $sortie->getNom() . ").";
+            $this->addFlash('dejainscrit', $message);
+            /*return $this->redirectToRoute('sortie_list', [
+                "message" => $message,
+                "entities" => $sorties,
+            ]);*/
+        }
+        else
+        {
+            $sortie->addParticipant($userconnecte);
+            $nbinscrit= $sortie->getNbInscriptionsMax();
+
+            $sortie->setNbInscriptionsRest($nbinscrit-1);
+            $entityManager->persist($sortie);
+
+            $entityManager->flush();
+            $this->addFlash('joinsucces', "Vous avez réussi votre inscription à la sortie \" " .$sortie->getNom() . "\" ! ");
+
+
+        }
+
+        //todo penser a retourner vers la sortie surlaquelle on viens de s'inscrire ??
+        return $this->redirectToRoute('sortie_list', [
+            'sorties' => $sorties]);
+
+
+
+
+    }
+
+    /**
+     * @Route("/escape/{id}", name="escape")
+     */
+    public function escapeSortie( Sortie $sortie,EntityManagerInterface $entityManager): Response
+    {
+        //raz message
+        $message = null;
+
+
+        $userconnecte = $this->getUser();
+        //recup bien l utilisateurconnecte
+
+        $sortierepo = $entityManager->getRepository(Sortie::class);
+        $id_sortie = $sortie->getId();
+
+        $sortie = $sortierepo->find($id_sortie);
+        // sort bien l objet sortie cliquée av son id
+
+        $sorties = $sortierepo->findAll();
+
+        if ($sortie->getParticipants()->contains($userconnecte))
+        {
+            $sortie->removeParticipant($userconnecte);
+
+            /*$nbinscrit= $sortie->getNbInscriptionsMax();
+            $sortie->setNbInscriptionsRest($nbinscrit+1);*/
+
+            $entityManager->refresh($sortie);
+
+            $entityManager->flush();
+
+        $message = "Vous vous etes bien desinscrit a la sortie (". $sortie->getNom() . ").";
+        $this->addFlash('dejainscrit', $message);
+        return $this->redirectToRoute('sortie_list', [
+            "message" => $message,
+            "entities" => $sorties,
+        ]);
+    }else
+
+        return $this->redirectToRoute('sortie_list', [
+            'sorties' => $sorties]);
+
+    }
+
+
+
 }
