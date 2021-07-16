@@ -122,7 +122,12 @@ class SortieController extends AbstractController
     {
         //raz message
         $message = null;
-
+        /*1 Crée
+        2 Ouverte
+        3 Cloturée
+        4 Activité en cours
+        5 Passée
+        6 Annulée*/
 
         $userconnecte = $this->getUser();
         //recup bien l utilisateurconnecte
@@ -135,7 +140,9 @@ class SortieController extends AbstractController
         // sort bien l objet sortie cliquée av son id
 
         $sorties = $sortierepo->findAll();
-        if ($sortie->getEtatSortie()->getId() != 3 )
+
+        // voir id dans bdd pour cloturée = 3
+        if ($sortie->getEtatSortie()->getId() == 3 )
         {
             $message = "Inscription à cette sortie (". $sortie->getNom() .") clôturée !.";
             $this->addFlash('cloturee', $message);
@@ -145,6 +152,7 @@ class SortieController extends AbstractController
                 "entities" => $sorties,
             ]);*/
         }
+        //else if ($sortie )
         elseif ( $sortie->getNbInscriptionsMax() == $sortie->getParticipants()->count()) {
             $message = "Nombre de participants max atteint pour cette sortie (" . $sortie->getNom() . ").";
             $this->addFlash('maxatteint', $message);
@@ -162,12 +170,9 @@ class SortieController extends AbstractController
                 "entities" => $sorties,
             ]);*/
         }
-        else
+        elseif ($sortie->getEtatSortie()->getId() == 2)
         {
             $sortie->addParticipant($userconnecte);
-            $nbinscrit= $sortie->getNbInscriptionsMax();
-
-            $sortie->setNbInscriptionsRest($nbinscrit-1);
             $entityManager->persist($sortie);
 
             $entityManager->flush();
@@ -208,16 +213,11 @@ class SortieController extends AbstractController
         if ($sortie->getParticipants()->contains($userconnecte))
         {
             $sortie->removeParticipant($userconnecte);
-
-            /*$nbinscrit= $sortie->getNbInscriptionsMax();
-            $sortie->setNbInscriptionsRest($nbinscrit+1);*/
-
             $entityManager->refresh($sortie);
-
             $entityManager->flush();
 
         $message = "Vous vous etes bien desinscrit a la sortie (". $sortie->getNom() . ").";
-        $this->addFlash('dejainscrit', $message);
+        $this->addFlash('dejaInscrit', $message);
         return $this->redirectToRoute('sortie_list', [
             "message" => $message,
             "entities" => $sorties,
