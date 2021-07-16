@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Data\SearchData;
 use App\Entity\Campus;
+use App\Entity\Etat;
 use App\Entity\Lieu;
 use App\Entity\Participant;
 use App\Entity\Sortie;
@@ -140,6 +141,8 @@ class SortieController extends AbstractController
 
         $sortierepo = $entityManager->getRepository(Sortie::class);
         $id_sortie = $sortie->getId();
+        $etatrepo = $entityManager->getRepository(Etat::class);
+        $etat = $etatrepo->find(3);
 
         $sortie = $sortierepo->find($id_sortie);
         // sort bien l objet sortie cliquée av son id
@@ -151,7 +154,7 @@ class SortieController extends AbstractController
         {
             $message = "Inscription à cette sortie (". $sortie->getNom() .") clôturée !.";
             $this->addFlash('cloturee', $message);
-            //$sortie->setEtatSortie("Cloturée");
+
             /*return $this->redirectToRoute('sortie_list', [
                 "message" => $message,
                 "entities" => $sorties,
@@ -177,19 +180,23 @@ class SortieController extends AbstractController
                 "entities" => $sorties,
             ]);*/
         }
-        elseif ($sortie->getEtatSortie()->getId() == 2)
+        elseif ($sortie->getEtatSortie()->getId() == 2 and ( $sortie->getNbInscriptionsMax()-1 == $sortie->getParticipants()->count()))
         {
-
             $sortie->addParticipant($userconnecte);
-            //dd($sortie->setEtat("Cloturée"));
-            //$sortie->setEtatSortie($sortie->getEtat());
-            $entityManager->persist($sortie);
+            $sortie->setEtatSortie($etat);
 
+            $entityManager->persist($sortie);
             $entityManager->flush();
             $this->addFlash('joinsucces', "Vous avez réussi votre inscription à la sortie \" " .$sortie->getNom() . "\" ! ");
-
-
         }
+    elseif ($sortie->getEtatSortie()->getId() == 2 )
+        {
+        $sortie->addParticipant($userconnecte);
+
+        $entityManager->persist($sortie);
+        $entityManager->flush();
+        $this->addFlash('joinsucces', "Vous avez réussi votre inscription à la sortie \" " .$sortie->getNom() . "\" ! ");
+    }
 
         //todo penser a retourner vers la sortie surlaquelle on viens de s'inscrire ??
         return $this->redirectToRoute('sortie_list', [
