@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Villes {% endblock %}
+
+{% block body %}
+    <h1 class="text-center mt-3 mb-5">Modifier la ville</h1>
+    <div class="container">
+        {{ form_start(cityForm) }}
+        {{ form_widget(cityForm) }}
+
+
+    <div>
+        <button type="submit" class="btn btn-info">Modifier</button>
+        {{ form_end(cityForm) }}
+    </div>
+</div>
+{% endblock %}

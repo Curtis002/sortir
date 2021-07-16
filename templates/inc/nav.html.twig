@@ -25,7 +25,7 @@
 
                  {% if is_granted("ROLE_ADMIN") %}
                      <li class="nav-item">
-                         <a class="nav-link" href="" title="lieux">Lieux</a>
+                         <a class="nav-link" href="{{ path('campus_list') }}" title="campus">Campus</a>
                      </li>
                      <li class="nav-item">
                          <a class="nav-link" href="{{ path('city_list') }}" title="cities">Villes</a>

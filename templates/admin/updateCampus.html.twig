@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Campus {% endblock %}
+
+{% block body %}
+    <h1 class="text-center mt-3 mb-5">Modifier le campus</h1>
+    <div class="container">
+        {{ form_start(campusForm) }}
+        {{ form_widget(campusForm) }}
+
+
+        <div>
+            <button type="submit" class="btn btn-info">Modifier</button>
+            {{ form_end(campusForm) }}
+        </div>
+    </div>
+{% endblock %}
