@@ -122,7 +122,7 @@ class SortieController extends AbstractController
     {
         //raz message
         $message = null;
-        /*1 Crée
+        /*1 En création
         2 Ouverte
         3 Cloturée
         4 Activité en cours
@@ -146,16 +146,18 @@ class SortieController extends AbstractController
         {
             $message = "Inscription à cette sortie (". $sortie->getNom() .") clôturée !.";
             $this->addFlash('cloturee', $message);
-
+            //$sortie->setEtatSortie("Cloturée");
             /*return $this->redirectToRoute('sortie_list', [
                 "message" => $message,
                 "entities" => $sorties,
             ]);*/
         }
-        //else if ($sortie )
+
         elseif ( $sortie->getNbInscriptionsMax() == $sortie->getParticipants()->count()) {
             $message = "Nombre de participants max atteint pour cette sortie (" . $sortie->getNom() . ").";
             $this->addFlash('maxatteint', $message);
+
+
             /*return $this->redirectToRoute('sortie_list', [
                 "message" => $message,
                 "entities" => $sorties,
@@ -172,7 +174,10 @@ class SortieController extends AbstractController
         }
         elseif ($sortie->getEtatSortie()->getId() == 2)
         {
+
             $sortie->addParticipant($userconnecte);
+            //dd($sortie->setEtat("Cloturée"));
+            //$sortie->setEtatSortie($sortie->getEtat());
             $entityManager->persist($sortie);
 
             $entityManager->flush();
@@ -210,7 +215,7 @@ class SortieController extends AbstractController
 
         $sorties = $sortierepo->findAll();
 
-        if ($sortie->getParticipants()->contains($userconnecte))
+        if ($sortie->getParticipants()->contains($userconnecte) )
         {
             $sortie->removeParticipant($userconnecte);
             $entityManager->refresh($sortie);
