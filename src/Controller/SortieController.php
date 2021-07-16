@@ -154,31 +154,16 @@ class SortieController extends AbstractController
         {
             $message = "Inscription à cette sortie (". $sortie->getNom() .") clôturée !.";
             $this->addFlash('cloturee', $message);
-
-            /*return $this->redirectToRoute('sortie_list', [
-                "message" => $message,
-                "entities" => $sorties,
-            ]);*/
         }
 
         elseif ( $sortie->getNbInscriptionsMax() == $sortie->getParticipants()->count()) {
             $message = "Nombre de participants max atteint pour cette sortie (" . $sortie->getNom() . ").";
             $this->addFlash('maxatteint', $message);
-
-
-            /*return $this->redirectToRoute('sortie_list', [
-                "message" => $message,
-                "entities" => $sorties,
-            ]);*/
         }
         elseif ($sortie->getParticipants()->contains($userconnecte))
         {
             $message = "Vous etes déjà inscrit à cette sortie (". $sortie->getNom() . ").";
             $this->addFlash('dejainscrit', $message);
-            /*return $this->redirectToRoute('sortie_list', [
-                "message" => $message,
-                "entities" => $sorties,
-            ]);*/
         }
         elseif ($sortie->getEtatSortie()->getId() == 2 and ( $sortie->getNbInscriptionsMax()-1 == $sortie->getParticipants()->count()))
         {
@@ -222,27 +207,44 @@ class SortieController extends AbstractController
         $sortierepo = $entityManager->getRepository(Sortie::class);
         $id_sortie = $sortie->getId();
 
+        $etatrepo = $entityManager->getRepository(Etat::class);
+        $etat = $etatrepo->find(2);
+
+
         $sortie = $sortierepo->find($id_sortie);
         // sort bien l objet sortie cliquée av son id
 
         $sorties = $sortierepo->findAll();
 
-        if ($sortie->getParticipants()->contains($userconnecte) )
+        if ( $sortie->getParticipants()->contains($userconnecte) and $sortie->getEtatSortie()->getId() == 3 and date("now") < $sortie->getDateLimiteInscription())
         {
+
             $sortie->removeParticipant($userconnecte);
+
+            $sortie->setEtatSortie($etat);
+
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            $message = "Vous vous etes bien desinscrit a la sortie (". $sortie->getNom() . ").";
+            $this->addFlash('deinscrit', $message);
+        }elseif ($sortie->getParticipants()->contains($userconnecte) and $sortie->getEtatSortie()->getId() == 2)
+        {
+
+            $sortie->removeParticipant($userconnecte);
+
             $entityManager->refresh($sortie);
             $entityManager->flush();
 
-        $message = "Vous vous etes bien desinscrit a la sortie (". $sortie->getNom() . ").";
-        $this->addFlash('dejaInscrit', $message);
+            $message = "Vous vous etes bien desinscrit a la sortie (". $sortie->getNom() . ").";
+            $this->addFlash('deinscrit', $message);
+
+        }
+
         return $this->redirectToRoute('sortie_list', [
             "message" => $message,
             "entities" => $sorties,
         ]);
-    }else
-
-        return $this->redirectToRoute('sortie_list', [
-            'sorties' => $sorties]);
 
     }
 
