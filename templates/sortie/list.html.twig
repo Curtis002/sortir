@@ -5,10 +5,11 @@
 {% block body %}
     <h1 class="text-center mt-3 mb-5">Liste des sorties</h1>
     <div class="container">
+{#        <div class="row">#}
+{#            {% include 'sortie/filter.html.twig' with {form: form} only %}#}
+{#        </div>#}
         <div>
-            {% include 'sortie/filter.html.twig' %}
-        </div>
-        <div>
+
             <table class="table">
                 <thead>
                 <tr>
@@ -22,24 +23,40 @@
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
-                {% for sortie in sorties %}
-                    <tbody>
+                <tbody>
+                    {% for sortie in sorties %}
                     <tr>
                         <td>{{ sortie.nom }}</td>
-                        <td>{{ sortie.dateHeureDebut|format_datetime('short', 'none', locale='fr') }}</td>
-                        <td>{{ sortie.dateLimiteInscription|format_datetime('short', 'none', locale='fr') }}</td>
+                        <td>{{ sortie.dateHeureDebut|format_datetime('short', 'none', locale='en') }}</td>
+                        <td>{{ sortie.dateHeureDebut|format_datetime('short', 'none', locale='en') }}</td>
                         <td>{{ sortie.participants|length }} / {{ sortie.nbInscriptionsMax }}</td>
-                        <td>{{ sortie.etatSortie }}</td>
-                        <td>TODO</td>
-                        <td>{{ sortie.organisateur }}</td>
-                        <td><a href="{{ path('sortie_detail', {'id': sortie.id}) }}">Afficher</a></td>
+                        <td>{{ sortie.etatsortie.libelle }}</td>
+                        <td>{% set jesuisinscrit = app.user.id %}
+                        {% if sortie.participants(jesuisinscrit) %}
+                            <input type="checkbox" value="inscrit"   disabled="disabled" checked readonly>
+
+                            {% endif %}
+                        </td>
+                        <td><a href="{{ path('participant_show', {'id': sortie.organisateur.id }) }}">{{ sortie.organisateur.nom }}</a></td>
+
+                        <td>
+                            {% if sortie.etatsortie.libelle == "Ouverte" %}
+                            <a href="{{ path('sortie_join', {'id' : sortie.id}) }}">S'inscrire</a>
+                            {% endif %}
+                            {% if sortie.participants(jesuisinscrit) %}
+                                <a href="{{ path('sortie_detail', {'id': sortie.id}) }}">Afficher</a>
+
+                                {# if sortie.etatsortie.libelle != "" #}
+                                <a href="{{ path('sortie_escape', {'id' : sortie.id}) }}">Se désister</a>
+                                {# endif #}
+                            {% endif %}
+
+                        </td>
                     </tr>
-                    </tbody>
-                {% endfor %}
+                    {% endfor %}
+                </tbody>
             </table>
-            <div>
-                <a href="{{ path('sortie_create') }}">Créer une sortie</a>
-            </div>
+
         </div>
     </div>
 

@@ -3,17 +3,13 @@
 
 namespace App\Controller;
 
-use App\Data\SearchData;
 use App\Entity\Campus;
 use App\Entity\Lieu;
 use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Entity\Ville;
 use App\Form\CreateSortieType;
-use App\Form\LieuType;
-use App\Form\SearchType;
 use App\Repository\SortieRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,21 +31,27 @@ class SortieController extends AbstractController
     /**
      * @Route("/", name="list")
      */
-    public function list(SortieRepository $sortieRepository, Request $request)
+    public function list()
     {
-
-        $data = new SearchData();
- //       $data->page = $request->get('page', 1);
-
-        $sortieForm = $this->createForm(SearchType::class, $data);
-        $sortieForm->handleRequest($request);
-
-        $sorties = $sortieRepository->findSearch($data);
+        $sorties = $this->entityManager->getRepository(Sortie::class)->findAll();
 
         return $this->render('sortie/list.html.twig', [
-            'sorties'=>$sorties,
-            'sortiesForm'=>$sortieForm->createView()
+            'sorties' => $sorties,
         ]);
+
+//        $data = new SearchData();
+//        $data->page = $request->get('page', 1);
+//
+//        $sortieForm = $this->createForm(SearchType::class, $data);
+//
+//        $sortieForm->handleRequest($request);
+//
+//        $sorties = $sortieRepository->findSearch($data);
+//
+//        return $this->render('sortie/list.html.twig', [
+//            'sorties'=>$sorties,
+//            'sortiesForm'=>$sortieForm->createView()
+//        ]);
     }
 
     /**
@@ -57,10 +59,10 @@ class SortieController extends AbstractController
      */
     public function detail(int $id, SortieRepository $sortieRepository): Response
     {
-        $sortie = $sortieRepository->find($id);
+        $sorties = $sortieRepository->find($id);
 
         return $this->render('sortie/detail.html.twig', [
-            "sortie"=>$sortie
+            "sorties"=>$sorties
         ]);
     }
 
@@ -120,7 +122,12 @@ class SortieController extends AbstractController
     {
         //raz message
         $message = null;
-
+        /*1 Crée
+        2 Ouverte
+        3 Cloturée
+        4 Activité en cours
+        5 Passée
+        6 Annulée*/
 
         $userconnecte = $this->getUser();
         //recup bien l utilisateurconnecte
@@ -133,7 +140,9 @@ class SortieController extends AbstractController
         // sort bien l objet sortie cliquée av son id
 
         $sorties = $sortierepo->findAll();
-        if ($sortie->getEtatSortie()->getId() != 3 )
+
+        // voir id dans bdd pour cloturée = 3
+        if ($sortie->getEtatSortie()->getId() == 3 )
         {
             $message = "Inscription à cette sortie (". $sortie->getNom() .") clôturée !.";
             $this->addFlash('cloturee', $message);
@@ -143,6 +152,7 @@ class SortieController extends AbstractController
                 "entities" => $sorties,
             ]);*/
         }
+        //else if ($sortie )
         elseif ( $sortie->getNbInscriptionsMax() == $sortie->getParticipants()->count()) {
             $message = "Nombre de participants max atteint pour cette sortie (" . $sortie->getNom() . ").";
             $this->addFlash('maxatteint', $message);
@@ -160,12 +170,9 @@ class SortieController extends AbstractController
                 "entities" => $sorties,
             ]);*/
         }
-        else
+        elseif ($sortie->getEtatSortie()->getId() == 2)
         {
             $sortie->addParticipant($userconnecte);
-            $nbinscrit= $sortie->getNbInscriptionsMax();
-
-            $sortie->setNbInscriptionsRest($nbinscrit-1);
             $entityManager->persist($sortie);
 
             $entityManager->flush();
@@ -206,16 +213,11 @@ class SortieController extends AbstractController
         if ($sortie->getParticipants()->contains($userconnecte))
         {
             $sortie->removeParticipant($userconnecte);
-
-            /*$nbinscrit= $sortie->getNbInscriptionsMax();
-            $sortie->setNbInscriptionsRest($nbinscrit+1);*/
-
             $entityManager->refresh($sortie);
-
             $entityManager->flush();
 
         $message = "Vous vous etes bien desinscrit a la sortie (". $sortie->getNom() . ").";
-        $this->addFlash('dejainscrit', $message);
+        $this->addFlash('dejaInscrit', $message);
         return $this->redirectToRoute('sortie_list', [
             "message" => $message,
             "entities" => $sorties,
