@@ -3,9 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\SortieRepository;
-use App\Entity\Etat;
-use App\Entity\Campus;
-use App\Entity\Participant;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,6 +13,16 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Sortie
 {
+    protected $lieux;
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getLieux(): ArrayCollection
+    {
+        return $this->lieux;
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -80,7 +87,7 @@ class Sortie
 
     /**
      * @ORM\ManyToOne(targetEntity=Lieu::class, inversedBy="sorties")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $lieu;
 
@@ -99,6 +106,7 @@ class Sortie
     public function __construct()
     {
         $this->participants = new ArrayCollection();
+        $this->lieux = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -201,6 +209,7 @@ class Sortie
 
         return $this;
     }
+
 
     /**
      * @return Collection|Participant[]

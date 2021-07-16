@@ -21,3 +21,13 @@
 footer{
     margin-top: 10px;
 }
+.div-hide{
+    display: none;
+}
+
+div.x-button {
+
+    float: right;
+    padding: 0;
+    margin-right: 0;
+}
