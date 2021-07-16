@@ -12,10 +12,10 @@
                 <div>Description et infos {{ sorties.infosSortie }}</div>
             </div>
             <div class="col-sm">
-                <div>Campus {{ sorties.campus }}</div>
+                <div>Campus {{ sorties.campus.nom }}</div>
                 <div>Lieu {{ sorties.lieu }}</div>
                 <div>Rue {{ sorties.lieu }}</div>
-{#                <div>Code postal {{ ville.codePostal }}</div>#}
+                <div>Code postal {{ sorties.lieu.ville.codePostal }}</div>
                 <div>Latitude {{ sorties.lieu.latitude }}</div>
                 <div>Longitude {{ sorties.lieu }}</div>
             </div>
@@ -29,10 +29,12 @@
             </tr>
             </thead>
                 <tbody>
+                {% for participant in sorties.participants %}
                 <tr>
-                    <td>{{ sortie.participants }}</td>
-                    <td>{{ sortie.participants }}</td>
+                    <td>{{ participant.pseudo }}</td>
+                    <td>{{ participant.nom }}</td>
                 </tr>
+                {% endfor %}
                 </tbody>
         </table>
     </div>
