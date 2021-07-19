@@ -4,7 +4,14 @@
 {% block title %} Creation d'une nouvelle sortie {% endblock %}
 
 {% block body %}
-    <h1 class="text-center mt-3 mb-5">Nouvelle sortie</h1>
+
+    <a href="{{ path('sortie_delete', {'id' : sortie.id }) }}" class="btn btn-danger btn-sm float-right mr-3 mt-4">
+        Supprimer la sortie
+    </a>
+
+    <div class="row justify-content-center">
+    <h1 class="text-center mt-3 mb-5">Gérer une Sortie</h1>
+    </div>
     <div class="container">
         {{ form_start(sortieForm) }}
         <div class="row">
@@ -28,7 +35,7 @@
                     <div class="div-hide">{{ form_row(sortieForm.ville) }}</div>
                 <div class="row">
                     <div class="col-md-11 custom-input">
-                        {{ form_row(sortieForm.lieuSortie) }}
+                        {{ form_row(sortieForm.lieu) }}
                     </div>
                     <div class="x-button col-md-1">
                         <a href="#" id="toggler"><img src="{{ asset('img/icons-plus.png') }}" alt="ajouter lieu" style="margin-top: 7px" ></a>
@@ -51,6 +58,7 @@
             <button type="reset" class="btn btn-info mb-3">Annuler</button>
         </div>
         {{ form_end(sortieForm) }}
+
     </div>
     <script>
         jQuery(document).ready(function()

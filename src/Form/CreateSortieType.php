@@ -50,9 +50,9 @@ class CreateSortieType extends AbstractType
                 'class' => Ville::class,
                 'choice_label' => 'nom'
             ])
-            ->add('lieuSortie', EntityType::class, [
+            ->add('lieu', EntityType::class, [
                 'class' => Lieu::class,
-                'mapped' => false,
+                'mapped' => true,
                 'label' => 'Lieu',
                 'required' => false,
                 'choice_label' => 'nom',

@@ -31,3 +31,6 @@ div.x-button {
     padding: 0;
     margin-right: 0;
 }
+.delete a button{
+    float: right;
+}

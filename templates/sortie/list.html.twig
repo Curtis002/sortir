@@ -69,7 +69,7 @@
 
                             {% elseif  (sortie.etatsortie.libelle == "En création") %}
                             {# todo modifier la sortie #}
-                                <a href="#">Modifier</a>
+                                <a href="{{ path('sortie_modifier_sortie', {'id' : sortie.id}) }}">Modifier</a>
                             {% endif %}
                                 </td>
                     </tr>
