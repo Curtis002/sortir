@@ -31,6 +31,9 @@ div.x-button {
     padding: 0;
     margin-right: 0;
 }
-.delete a button{
-    float: right;
+.info{
+    color: black;
+    text-align: right;
+    font-weight: bold;
+    text-decoration: underline;
 }
