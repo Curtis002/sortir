@@ -5,6 +5,16 @@
 {% block body %}
     <h1 class="text-center mt-3 mb-5">Liste des sorties</h1>
     <div class="container">
+        {% for message in app.flashes('enregistree') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('publiee') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
         <div class="row">
             {% include 'sortie/filter.html.twig' %}
         </div>

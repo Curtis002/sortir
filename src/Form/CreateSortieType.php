@@ -58,12 +58,12 @@ class CreateSortieType extends AbstractType
                 'choice_label' => 'nom',
                 'placeholder' => '-- Choisir un lieu --'
             ])
-            ->add('etatSortie', EntityType::class, [
-                'label' => 'Etat',
-                'class' => Etat::class,
-                'choice_label' => 'libelle',
-                'placeholder' => '--Choisir un état--'
-            ])
+//            ->add('etatSortie', EntityType::class, [
+//                'label' => 'Etat',
+//                'class' => Etat::class,
+//                'choice_label' => 'libelle',
+//                'placeholder' => '--Choisir un état--'
+//            ])
             ->add('lieux', CollectionType::class, [
                 'entry_type' => LieuType::class,
                 'entry_options' => ['label' => false],
