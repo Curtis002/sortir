@@ -24,6 +24,16 @@ class Sortie
     }
 
     /**
+     * @param ArrayCollection $lieux
+     */
+    public function setLieux(ArrayCollection $lieux): void
+    {
+        $this->lieux = $lieux;
+    }
+
+
+
+    /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")

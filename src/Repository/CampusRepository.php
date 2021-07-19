@@ -20,7 +20,7 @@ class CampusRepository extends ServiceEntityRepository
         parent::__construct($registry, Campus::class);
     }
 
-    public function findSearch(SearchDataAdmin $search): array
+    public function findSearch2(SearchDataAdmin $search): array
     {
         $query = $this
             ->createQueryBuilder('c');

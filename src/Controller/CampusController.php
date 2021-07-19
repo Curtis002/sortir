@@ -45,7 +45,7 @@ class CampusController extends AbstractController
         $data = new SearchDataAdmin();
         $form = $this->createForm(SearchDataType::class, $data);
         $form->handleRequest($request);
-        $camps = $campusRepository->findSearch($data);
+        $camps = $campusRepository->findSearch2($data);
 
         return $this->render('admin/campus.html.twig', [
                 'allCampus' => $allCampus,

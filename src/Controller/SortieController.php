@@ -15,6 +15,7 @@ use App\Repository\ParticipantRepository;
 use App\Form\SearchType;
 use App\Repository\SortieRepository;
 use App\Service\Statutchecker;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -102,6 +103,60 @@ class SortieController extends AbstractController
     }
 
     /**
+     * @Route("/modifier-sortie/{id}", name="modifier_sortie")
+     */
+    public function modify(int $id, Request $request): Response
+    {
+        $sortie = $this->entityManager->getRepository(Sortie::class)->findOneById($id);
+
+        $lieu1 = new Lieu();
+        $lieux = new ArrayCollection();
+        $lieux->add($lieu1);
+
+        $sortie->setLieux($lieux);
+
+        $sortieForm = $this->createForm(CreateSortieType::class, $sortie);
+        $sortieForm->handleRequest($request);
+
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+            //dd($request);
+            // Si lieu existant
+            if ($request->request->get('create_sortie')['lieux'][0]["nom"] !== "") {
+                $lieu1->setNom($request->request->get('create_sortie')['lieux'][0]['nom']);
+                $lieu1->setRue($request->request->get('create_sortie')['lieux'][0]['rue']);
+                $idVille = (int)($request->request->get('create_sortie')['ville']);
+                $lieu1->setVille($this->entityManager->getRepository(Ville::class)->findOneById($idVille));
+                $this->entityManager->persist($lieu1);
+                $sortie->setLieu($lieu1);
+            }
+
+            // Savoir si on enregistre ou publie la sortie
+            $clicked = $request->request->get('clicked');
+
+            if ($clicked == 'enregistrer') {
+                $sortie->setEtatSortie($this->entityManager->getRepository(Etat::class)->findOneById(1));
+            } else {
+                $sortie->setEtatSortie($this->entityManager->getRepository(Etat::class)->findOneById(2));
+            }
+
+            $this->entityManager->persist($sortie);
+            $this->entityManager->flush();
+
+
+            $message = "La sortie a bien été mise à jour";
+            $this->addFlash('maj', $message);
+
+            return $this->redirectToRoute('sortie_list');
+        }
+
+        return $this->render('sortie/create.html.twig', [
+            'sortie' => $sortie,
+            "sortieForm" => $sortieForm->createView()
+        ]);
+    }
+
+
+    /**
      * @Route ("/create", name="create")
      */
 
@@ -165,6 +220,23 @@ class SortieController extends AbstractController
 
         ]);
     }
+
+    /**
+     * @Route("/supprimer-sortie/{id}", name="delete")
+     */
+    public function delete($id): Response
+    {
+        echo "passe ici";
+        $sortie = $this->entityManager->getRepository(Sortie::class)->findOneById($id);
+        dump($sortie);
+        $this->entityManager->remove($sortie);
+        $this->entityManager->flush();
+
+        return $this->redirectToRoute('sortie_list');
+
+    }
+
+
 
     /**
      * @Route("/join/{id}", name="join")
