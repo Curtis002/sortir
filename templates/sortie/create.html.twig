@@ -43,11 +43,12 @@
                             {% endfor %}
                         </div>
                     </div>
-                    {{ form_row(sortieForm.etatSortie) }}
             </div>
         </div>
         <div class="d-flex justify-content-center">
-            <button type="submit" class="btn btn-info mb-3">Créer</button>
+            <button type="submit" name="clicked" value="enregistrer" class="btn btn-info mb-3 mr-3">Enregistrer</button>
+            <button type="submit" name="clicked" value="publier" class="btn btn-info mb-3 mr-3">Publier la sortie</button>
+            <button type="reset" class="btn btn-info mb-3">Annuler</button>
         </div>
         {{ form_end(sortieForm) }}
     </div>

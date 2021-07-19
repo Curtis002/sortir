@@ -107,11 +107,27 @@ class SortieController extends AbstractController
                 $idVille = (int)($request->request->get('create_sortie')['ville']);
                 $lieu1->setVille($this->entityManager->getRepository(Ville::class)->findOneById($idVille));
             }
+
+            // Savoir si on enregistre ou publie la sortie
+            $clicked = $request->request->get('clicked');
+
+            if ($clicked == 'enregistrer') {
+                $sortie->setEtatSortie($this->entityManager->getRepository(Etat::class)->findOneById(1));
+                $message = "Votre sortie a bien été enregistrée";
+                $this->addFlash('enregistree', $message);
+            } else {
+                $sortie->setEtatSortie($this->entityManager->getRepository(Etat::class)->findOneById(2));
+                $message = "Votre sortie a bien été publiée";
+                $this->addFlash('publiee', $message);
+            }
+
             $entityManager->persist($lieu1);
             $sortie->setLieu($lieu1);
             dump($sortie);
             $entityManager->persist($sortie);
             $entityManager->flush();
+
+            return $this->redirectToRoute('sortie_list');
         }
 
         return $this->render('sortie/create.html.twig'
