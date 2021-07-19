@@ -14,11 +14,14 @@ use App\Form\CreateSortieType;
 use App\Repository\ParticipantRepository;
 use App\Form\SearchType;
 use App\Repository\SortieRepository;
+use App\Service\Statutchecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\DateTime;
+
 
 /**
  * @Route("/sorties", name="sortie_")
@@ -47,12 +50,38 @@ class SortieController extends AbstractController
     /**
      * @Route("/", name="list")
      */
-    public function list(SortieRepository $sortieRepository, Request $request)
+    public function list(SortieRepository $sortieRepository,EntityManagerInterface $entityManager, Request $request, Statutchecker $statutchecker)
     {
         $data = new SearchData();
         $sortieForm = $this->createForm(SearchType::class, $data);
         $sortieForm->handleRequest($request);
         $sorties = $sortieRepository->findSearch($data);
+
+        /////----test statutchecker-----//////// todo a integer dans le service statutchecker
+
+        for ($i = 0; $i <= count($sorties)-1; $i++){
+
+           $s = $sorties[$i];
+           $now = time();
+
+           $dateLimitCloture = $s->getDateLimiteInscription()->getTimestamp();
+
+           //var_dump($now);
+           //var_dump($dateLimitCloture);
+
+            if ($now > $dateLimitCloture && $s->getEtatSortie()->getid() != 3 )
+            {
+
+                $s->setEtatSortie($this->entityManager->getRepository(Etat::class)->findOneById(3));
+
+                $entityManager->refresh($s);
+                $entityManager->flush();
+
+            }
+
+        }
+        /////----test statutchecker-----////////
+
 
         return $this->render('sortie/list.html.twig', [
             'sorties'=>$sorties,
