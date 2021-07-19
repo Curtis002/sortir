@@ -44,7 +44,7 @@ class CitiesController extends AbstractController
         $data = new SearchDataAdmin();
         $form = $this->createForm(SearchDataType::class, $data);
         $form->handleRequest($request);
-        $vil = $villeRepository->findSearch($data);
+        $vil = $villeRepository->findSearch3($data);
 
         return $this->render('admin/cities.html.twig', [
                 'cities' => $cities,

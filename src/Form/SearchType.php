@@ -19,14 +19,6 @@ class SearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('campus', EntityType::class, [
-                'label' => false,
-                //quelle est la classe à afficher ici ?
-                'class' => Campus::class,
-                //quelle propriété utiliser pour les <option> dans la liste déroulante ?
-                'choice_label' => 'nom',
-                'placeholder' => '--Choisir un campus--'
-            ])
             ->add('q', TextType::class, [
                 'label' => false,
                 'required' => false,
@@ -34,12 +26,25 @@ class SearchType extends AbstractType
                     'placeholder' => 'Rechercher'
                 ]
             ])
+            ->add('campus', EntityType::class, [
+                'label' => false,
+                //quelle est la classe à afficher ici ?
+                'class' => Campus::class,
+                'required' => false,
+                //quelle propriété utiliser pour les <option> dans la liste déroulante ?
+                'choice_label' => 'nom',
+                'placeholder' => '--Choisir un campus--'
+            ])
             ->add('dateDebut', DateType::class, [
+                'label' => false,
                 'html5' => true,
+                'required' => false,
                 'widget' => 'single_text',
             ])
             ->add('dateFin', DateType::class, [
+                'label' => false,
                 'html5' => true,
+                'required' => false,
                 'widget' => 'single_text',
             ])
             ->add('organisateur', CheckboxType::class, [
