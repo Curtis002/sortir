@@ -39,18 +39,6 @@ class SortieController extends AbstractController
     /**
      * @Route("/", name="list")
      */
-   /* public function list(SortieRepository $sortieRepository)
-    {
-        $sorties = $sortieRepository->findAll();
-
-        return $this->render('sortie/list.html.twig', [
-            'sorties' => $sorties,
-        ]);
-    }*/
-
-    /**
-     * @Route("/", name="list")
-     */
     public function list(SortieRepository $sortieRepository,EntityManagerInterface $entityManager, Request $request, Statutchecker $statutchecker)
     {
         $data = new SearchData();
