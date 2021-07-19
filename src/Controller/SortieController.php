@@ -46,29 +46,8 @@ class SortieController extends AbstractController
         $sortieForm->handleRequest($request);
         $sorties = $sortieRepository->findSearch($data);
 
-        /////----test statutchecker-----//////// todo a integer dans le service statutchecker
-
-        for ($i = 0; $i <= count($sorties)-1; $i++){
-
-           $s = $sorties[$i];
-           $now = time();
-
-           $dateLimitCloture = $s->getDateLimiteInscription()->getTimestamp();
-
-           //var_dump($now);
-           //var_dump($dateLimitCloture);
-
-            if ($now > $dateLimitCloture && $s->getEtatSortie()->getid() != 3 )
-            {
-
-                $s->setEtatSortie($this->entityManager->getRepository(Etat::class)->findOneById(3));
-
-                $entityManager->refresh($s);
-                $entityManager->flush();
-
-            }
-
-        }
+        /////----test statutchecker-----////////
+        $statutchecker->statutClotureeSortie($sorties, $entityManager);
         /////----test statutchecker-----////////
 
 
