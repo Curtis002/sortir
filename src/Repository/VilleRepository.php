@@ -22,7 +22,7 @@ class VilleRepository extends ServiceEntityRepository
         parent::__construct($registry, Ville::class);
     }
 
-    public function findSearch(SearchDataAdmin $search): array
+    public function findSearch3(SearchDataAdmin $search): array
     {
         $query = $this
             ->createQueryBuilder('v');
@@ -33,6 +33,13 @@ class VilleRepository extends ServiceEntityRepository
                 ->orWhere('v.codePostal LIKE :q')
                 ->setParameter('q', "%{$search->q}%");
         }
+
+//        if (!empty($search->codePostal)) {
+//            $query = $query
+//                ->andWhere('v.id IN (:ville)')
+//                ->setParameter('ville', $search->codePostal);
+//        }
+
         return $query->getQuery()->getResult();
     }
 
