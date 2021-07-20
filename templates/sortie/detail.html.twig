@@ -3,6 +3,9 @@
 {% block body %}
     <div class="container">
         <h1 class="text-center mt-3 mb-5">{{ sorties.nom }}</h1>
+        {% if sorties.etatSortie == 'Annulée' %}
+        <div class="alert alert-danger">La sortie est annulée. Motif : {{ sorties.motif }}</div>
+        {% endif %}
         <div class="row mb-5">
             <div class="col-md-6">
                 <h4 class="mb-3">Infos pratiques :</h4>
