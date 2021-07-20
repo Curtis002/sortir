@@ -56,29 +56,22 @@ class Statutchecker
                 $s->setEtatSortie($this->entityManager->getRepository(Etat::class)->findOneById(4));
 
                 $entityManager->persist($s);
-
                 $entityManager->flush();
             }
             // 4 => 5 si date fin depassé ou egal alors set a activité terminé
             elseif ( $now >= $dateFin && $now <= $dateArchivage  ) {
 
-
-
                 $s->setEtatSortie($this->entityManager->getRepository(Etat::class)->findOneById(5));
 
                 $entityManager->persist($s);
-
                 $entityManager->flush();
             }
             // 5,6 => 7 1 mois apres date de fin prevue
             elseif ( $now >= $dateArchivage ) {
 
-
-
                 $s->setEtatSortie($this->entityManager->getRepository(Etat::class)->findOneById(7));
 
                 $entityManager->persist($s);
-
                 $entityManager->flush();
             }
 
