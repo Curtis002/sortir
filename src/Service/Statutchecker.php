@@ -38,6 +38,7 @@ class Statutchecker
             $dateFin = $dateDebut + $s->getDuree()*60;
             //var_dump($dateFin);
             $dateArchivage = $dateFin+2628000;
+            //var_dump(date("Y m d H i s",$dateArchivage));
 
             // 2 => 3 comparé la date de cloture avec la date du jour now
             if ($now >= $dateLimitCloture && $now <= $dateDebut ) {
@@ -59,7 +60,7 @@ class Statutchecker
                 $entityManager->flush();
             }
             // 4 => 5 si date fin depassé ou egal alors set a activité terminé
-            elseif ( $now >= $dateFin ) {
+            elseif ( $now >= $dateFin && $now <= $dateArchivage  ) {
 
 
 
