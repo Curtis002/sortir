@@ -38,7 +38,7 @@ class Statutchecker
             $dateFin = $dateDebut + $s->getDuree()*60;
             //var_dump($dateFin);
             $dateArchivage = $dateFin+2628000;
-            var_dump($dateArchivage);
+            
 
             // comparé la date de cloture avec la date du jour now
             if ($now > $dateLimitCloture && $now <= $dateDebut && $s->getEtatSortie()->getid() == 2) {

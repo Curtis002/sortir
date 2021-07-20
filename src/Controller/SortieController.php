@@ -293,7 +293,7 @@ class SortieController extends AbstractController
         $entityManager->flush();
         $this->addFlash('joinsucces', "Vous avez réussi votre inscription à la sortie \" " .$sortie->getNom() . "\" ! ");
     }
-        
+
         return $this->redirectToRoute('sortie_list', [
             'sorties' => $sorties]);
 
