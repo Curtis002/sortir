@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Data\SearchData;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -35,7 +36,7 @@ class SortieRepository extends ServiceEntityRepository
      /**
      * @return array
      */
-    public function findSearch(SearchData $search): array
+    public function findSearch(SearchData $search, Participant $participant): array
     {
         $queryBuilder = $this
             //récupère les sorties
@@ -68,23 +69,27 @@ class SortieRepository extends ServiceEntityRepository
         //recherche checkbox
         if (!empty($search->organisateur)) {
             $queryBuilder = $queryBuilder
-                ->andWhere('s.organisateur = 1');
+                ->andWhere('s.organisateur = :organisateur')
+                ->setParameter('organisateur', $participant->getId());
         }
 
-        if (!empty($search->inscrit)) {
-            $queryBuilder = $queryBuilder
-                ->andWhere('s.inscrit = 1');
-        }
+//        if (!empty($search->inscrit)) {
+//            $queryBuilder = $queryBuilder
+//                ->andWhere('s.participants = :inscrit')
+//                ->setParameter('inscrit', $participant->getInscritSortie());
+//        }
 
-        if (!empty($search->notInscrit)) {
-            $queryBuilder = $queryBuilder
-                ->andWhere('s.notInscrit = 1');
-                        }
-
-        if (!empty($search->terminees)) {
-            $queryBuilder = $queryBuilder
-                ->andWhere('s.terminees = 1');
-        }
+//        if (!empty($search->notInscrit)) {
+//            $queryBuilder = $queryBuilder
+//                ->andWhere('s.notInscrit = :notInscrit')
+//                ->setParameter('notInscrit', $search->notInscrit);
+//        }
+//
+//        if (!empty($search->terminees)) {
+//            $queryBuilder = $queryBuilder
+//                ->andWhere('s.terminees > :terminees')
+//                ->setParameter('terminees', $search->dateFin);
+//        }
 
         return $queryBuilder->getQuery()->getResult();
     }

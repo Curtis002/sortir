@@ -53,10 +53,20 @@ class SortieController extends AbstractController
      */
     public function list(SortieRepository $sortieRepository,EntityManagerInterface $entityManager, Request $request, Statutchecker $statutchecker)
     {
+        $current = $this->getUser();
+        $participant = $this->entityManager->getRepository(Participant::class)->find($current);
+        //dump($participant);
+
         $data = new SearchData();
         $sortieForm = $this->createForm(SearchType::class, $data);
         $sortieForm->handleRequest($request);
-        $sorties = $sortieRepository->findSearch($data);
+
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+            $sorties = $sortieRepository->findSearch($data, $participant);
+
+        } else {
+            $sorties = $sortieRepository->findAll();
+        }
 
         /////----test statutchecker-----//////// todo a integer dans le service statutchecker
 
