@@ -31,7 +31,6 @@ class SearchType extends AbstractType
                 'required' => false,
                 //quelle est la classe à afficher ici ?
                 'class' => Campus::class,
-                'required' => false,
                 //quelle propriété utiliser pour les <option> dans la liste déroulante ?
                 'choice_label' => 'nom',
                 'placeholder' => '--Choisir un campus--'
@@ -49,7 +48,7 @@ class SearchType extends AbstractType
                 'widget' => 'single_text',
             ])
             ->add('organisateur', CheckboxType::class, [
-                'label' => 'Sortie dont je suis l organisateur',
+                'label' => 'Sortie dont je suis l\'organisateur',
                 'required' => false,
             ])
             ->add('inscrit', CheckboxType::class, [

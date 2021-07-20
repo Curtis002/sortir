@@ -15,11 +15,26 @@
                 {{ message }}
             </div>
         {% endfor %}
-        <div class="row">
+
+        <div class="container">
+        <div class="d-flex flex-column">
+            <div class="p-1">
+                <h5 class="info">Date du jour: {{ "now" | date("d/m/Y") }}</h5>
+                <div class="p-1">
+                </div>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <a href="{{ path('participant_edit', {'id': app.user.id}) }}" title="mon profil">
+                        <h5 class="info">Participant : {{ app.user.pseudo }}</h5>
+                    </a>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+
+    <div class="row">
             {% include 'sortie/filter.html.twig' %}
         </div>
         <div>
-
             <table class="table">
                 <thead>
                 <tr>
@@ -39,8 +54,8 @@
                     <tr>
                         <td>{{ sortie.nom }}</td>
                         <td>{{ sortie.campus.nom }}</td>
-                        <td>{{ sortie.dateHeureDebut|format_datetime('short', 'none', locale='fr') }}</td>
-                        <td>{{ sortie.dateLimiteInscription|format_datetime('short', 'none', locale='fr') }}</td>
+                        <td>{{ sortie.dateHeureDebut|format_datetime('short', 'none', locale='en') }}</td>
+                        <td>{{ sortie.dateLimiteInscription|format_datetime('short', 'none', locale='en') }}</td>
                         <td>{{ sortie.participants|length }} / {{ sortie.nbInscriptionsMax }}</td>
                         <td>{{ sortie.etatsortie.libelle }}</td>
                         <td>{% set jesuisinscrit = false %}

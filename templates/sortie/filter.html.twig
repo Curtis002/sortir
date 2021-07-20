@@ -4,18 +4,18 @@
         <div class="row">
             <div class="col-sm">
                 <h4>Le nom de la sortie contient</h4>
-                {{ form(sortiesForm.q) }}
+                {{ form_row(sortiesForm.q) }}
 
                 <h4>Campus</h4>
-                {{ form(sortiesForm.campus) }}
+                {{ form_row(sortiesForm.campus) }}
 
-                <h4>Entre {{ form(sortiesForm.dateDebut) }} et {{ form(sortiesForm.dateFin) }} </h4>
+                <h4>Entre {{ form_row(sortiesForm.dateDebut) }} et {{ form_row(sortiesForm.dateFin) }} </h4>
             </div>
             <div class="col-sm">
-                {{ form(sortiesForm.organisateur) }}
-                {{ form(sortiesForm.inscrit) }}
-                {{ form(sortiesForm.notInscrit) }}
-                {{ form(sortiesForm.terminees) }}
+                {{ form_row(sortiesForm.organisateur) }}
+                {{ form_row(sortiesForm.inscrit) }}
+                {{ form_row(sortiesForm.notInscrit) }}
+                {{ form_row(sortiesForm.terminees) }}
             </div>
             <div class="col-sm">
                 <button type="reset" class="btn btn-secondary btn-sm">Réinitialiser les filtres</button>
