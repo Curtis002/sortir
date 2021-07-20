@@ -57,7 +57,13 @@ class SortieController extends AbstractController
         }
 
         /////----test statutchecker-----////////
+        /// statut cloturee
         $statutchecker->statutClotureeSortie($sorties, $entityManager);
+        /// statut en cours
+        $statutchecker->statutActivitéeEnCoursSortie($sorties, $entityManager);
+        /// statut terminée
+
+        /// statut archivé
         /////----test statutchecker-----////////
 
 

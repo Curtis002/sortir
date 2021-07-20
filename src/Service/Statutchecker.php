@@ -44,4 +44,36 @@ class Statutchecker
         }
 
     }
+
+
+    public function statutActivitéeEnCoursSortie(array $sorties, EntityManagerInterface $entityManager)
+    {
+
+        for ($i = 0; $i <= count($sorties) - 1; $i++) {
+            // recup list de sorties
+            $s = $sorties[$i];
+
+            date_default_timezone_set("Europe/Paris");
+            $now = time();
+            //var_dump($now);
+            $dateDebut = $s->getDateHeureDebut()->getTimeStamp();
+            //var_dump($dateDebut);
+            //var_dump(date("Y m d H i s",$dateDebut));
+            $dateFin = $dateDebut + $s->getDuree()*60;
+            //var_dump($dateFin);
+
+            // comparé la date du jour av date de debut d activité
+            if ($now >= $dateDebut && $now <= $dateFin && $s->getEtatSortie()->getid() == 3) {
+
+                //si date depassé alors -> statut cloturee
+                $s->setEtatSortie($this->entityManager->getRepository(Etat::class)->findOneById(4));
+
+                $entityManager->persist($s);
+
+                $entityManager->flush();
+            }
+
+        }
+
+    }
 }
