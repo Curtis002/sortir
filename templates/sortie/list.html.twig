@@ -51,6 +51,7 @@
                 </thead>
                 <tbody>
                     {% for sortie in sorties %}
+                        {% if sortie.etatSortie.libelle != "En création" or app.user == sortie.organisateur %}
                     <tr>
                         <td>{{ sortie.nom }}</td>
                         <td>{{ sortie.campus.nom }}</td>
@@ -84,13 +85,18 @@
                                     {% endif %}
                                 {% endif %}
 
-                            {% elseif  (sortie.etatsortie.libelle == "En création") %}
-                            {# todo modifier la sortie #}
+
+                            {% elseif  (sortie.etatsortie.libelle == "En création") and sortie.organisateur == app.user %}
                                 <a href="{{ path('sortie_modifier_sortie', {'id' : sortie.id}) }}">Modifier</a>
                             {% endif %}
+                        {% if sortie.etatSortie.libelle == "Ouverte" and sortie.organisateur == app.user %}
+                            <a href="{{ path('sortie_cancel', {'id' : sortie.id }) }}">Annuler</a>
+                        {% endif %}
                                 </td>
                     </tr>
+                        {% endif %}
                     {% endfor %}
+
                 </tbody>
             </table>
 

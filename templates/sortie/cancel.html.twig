@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container">
+    <h1 class="text-center mt-3 mb-5">Annuler une sortie</h1>
+    <div class="row justify-content-center">
+        {{ form_start(cancelForm) }}
+        <table class="table table-borderless">
+            <tbody>
+            <tr>
+                <td>Nom de la sortie :</td>
+                <td>{{ sortie.nom }}</td>
+            </tr>
+            <tr>
+                <td>Date de la sortie :</td>
+                <td>{{ sortie.dateHeureDebut|format_datetime('short', 'none', locale='fr') }}</td>
+            </tr>
+            <tr>
+                <td>Campus :</td>
+                <td>{{ sortie.campus.nom }}</td>
+            </tr>
+            <tr>
+                <td>Lieu :</td>
+                <td>{{ sortie.lieu.nom }}, {{ sortie.lieu.rue }} - {{ sortie.lieu.ville.codePostal }} {{ sortie.lieu.ville.nom }}</td>
+            </tr>
+            <tr>
+                <td>Motif :</td>
+                <td>{{ form_widget(cancelForm) }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="row justify-content-center">
+            <button type="submit" class="btn btn-info mb-3 mr-3">Enregistrer</button>
+            <button type="reset" class="btn btn-info mb-3">Annuler</button>
+        </div>
+        {{ form_end(cancelForm) }}
+
+
+    </div>
+    <div class="row justify-content-center mt-3 mb-5">
+        <a href="{{ path('sortie_list') }}">Revenir à la liste des sorties</a>
+    </div>
+</div>
+    {% endblock %}
+
+    {% block title %}
+        {{ parent() }}
+    {% endblock %}
+

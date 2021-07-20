@@ -79,10 +79,10 @@ class Sortie
      */
     private $infosSortie;
 
-  /*  /**
+    /**
      * @ORM\Column(type="string", length=255)
      */
-   /* private $etat; */
+     private $motif;
 
     /**
      * @ORM\ManyToMany(targetEntity=Participant::class, mappedBy="inscritSortie")
@@ -208,14 +208,14 @@ class Sortie
         return $this;
     }
 
-    public function getEtat(): ?string
+    public function getMotif(): ?string
     {
-        return $this->etat;
+        return $this->motif;
     }
 
-    public function setEtat(string $etat): self
+    public function setMotif(string $motif): self
     {
-        $this->etat = $etat;
+        $this->motif = $motif;
 
         return $this;
     }
