@@ -39,18 +39,6 @@ class SortieController extends AbstractController
     /**
      * @Route("/", name="list")
      */
-   /* public function list(SortieRepository $sortieRepository)
-    {
-        $sorties = $sortieRepository->findAll();
-
-        return $this->render('sortie/list.html.twig', [
-            'sorties' => $sorties,
-        ]);
-    }*/
-
-    /**
-     * @Route("/", name="list")
-     */
     public function list(SortieRepository $sortieRepository,EntityManagerInterface $entityManager, Request $request, Statutchecker $statutchecker)
     {
         $current = $this->getUser();
@@ -68,29 +56,8 @@ class SortieController extends AbstractController
             $sorties = $sortieRepository->findAll();
         }
 
-        /////----test statutchecker-----//////// todo a integer dans le service statutchecker
-
-        for ($i = 0; $i <= count($sorties)-1; $i++){
-
-           $s = $sorties[$i];
-           $now = time();
-
-           $dateLimitCloture = $s->getDateLimiteInscription()->getTimestamp();
-
-           //var_dump($now);
-           //var_dump($dateLimitCloture);
-
-            if ($now > $dateLimitCloture && $s->getEtatSortie()->getid() != 3 )
-            {
-
-                $s->setEtatSortie($this->entityManager->getRepository(Etat::class)->findOneById(3));
-
-                $entityManager->refresh($s);
-                $entityManager->flush();
-
-            }
-
-        }
+        /////----test statutchecker-----////////
+        $statutchecker->statutClotureeSortie($sorties, $entityManager);
         /////----test statutchecker-----////////
 
 

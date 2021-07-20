@@ -62,9 +62,10 @@ class SortieRepository extends ServiceEntityRepository
 
         //Recherche par date
         if (!empty($search->dateDebut && $search->dateFin)) {
-            //A COMPLETER / QUELLES CONDITIONS SUR RECHERCHE PAR DATE ?
+            $queryBuilder = $queryBuilder
+                ->andWhere('s.dateHeureDebut >= dateDebut')
+                ->andWhere('s.dateHeureDebut >= dateFin');
         }
-
 
         //recherche checkbox
         if (!empty($search->organisateur)) {

@@ -28,6 +28,7 @@ class SearchType extends AbstractType
             ])
             ->add('campus', EntityType::class, [
                 'label' => false,
+                'required' => false,
                 //quelle est la classe à afficher ici ?
                 'class' => Campus::class,
                 'required' => false,

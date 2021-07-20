@@ -20,25 +20,28 @@ class Statutchecker
 
 
 
-    public function statutClotureeSortie(Sortie $sortie)
+    public function statutClotureeSortie(array $sorties, EntityManagerInterface $entityManager)
     {
-        // recup list de sorties
+
+        for ($i = 0; $i <= count($sorties) - 1; $i++) {
+            // recup list de sorties
+            $s = $sorties[$i];
 
 
+            $now = time();
+            $dateLimitCloture = $s->getDateLimiteInscription()->getTimestamp();
 
+            // comparé la date de cloture avec la date du jour now
+            if ($now > $dateLimitCloture && $s->getEtatSortie()->getid() != 3) {
 
+                //si date depassé alors -> statut cloturee
+                $s->setEtatSortie($this->entityManager->getRepository(Etat::class)->findOneById(3));
 
+                $entityManager->persist($s);
+                $entityManager->flush();
+            }
 
         }
 
-
-        //$sortie->setEtatSortie(2);
-
-
-
-        // comparé la date de cloture avec la date du jour now
-
-        //si date depassé alors -> statut cloturee
-
-
+    }
 }
