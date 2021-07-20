@@ -38,11 +38,9 @@ class Statutchecker
             $dateFin = $dateDebut + $s->getDuree()*60;
             //var_dump($dateFin);
             $dateArchivage = $dateFin+2628000;
-            
 
-            // comparé la date de cloture avec la date du jour now
-            if ($now > $dateLimitCloture && $now <= $dateDebut && $s->getEtatSortie()->getid() == 2) {
-
+            // 2 => 3 comparé la date de cloture avec la date du jour now
+            if ($now >= $dateLimitCloture && $now <= $dateDebut ) {
                 //si date depassé alors -> statut cloturee
                 $s->setEtatSortie($this->entityManager->getRepository(Etat::class)->findOneById(3));
 
@@ -51,8 +49,8 @@ class Statutchecker
             }
 
 
-            // comparé la date du jour av date de debut d activité
-            elseif ($now >= $dateDebut && $now <= $dateFin && $s->getEtatSortie()->getid() == 3) {
+            // 3 => 4 comparé la date du jour av date de debut d activité
+            elseif ($now >= $dateDebut && $now <= $dateFin ) {
 
                 $s->setEtatSortie($this->entityManager->getRepository(Etat::class)->findOneById(4));
 
@@ -60,8 +58,8 @@ class Statutchecker
 
                 $entityManager->flush();
             }
-            //si date fin depassé ou egal alors set a activité terminé
-            elseif ( $now >= $dateFin && $s->getEtatSortie()->getid() == 4) {
+            // 4 => 5 si date fin depassé ou egal alors set a activité terminé
+            elseif ( $now >= $dateFin ) {
 
 
 
@@ -71,7 +69,8 @@ class Statutchecker
 
                 $entityManager->flush();
             }
-            elseif ( $now >= $dateArchivage && $s->getEtatSortie()->getid() == 5 or $s->getEtatSortie()->getid() == 6) {
+            // 5,6 => 7 1 mois apres date de fin prevue
+            elseif ( $now >= $dateArchivage ) {
 
 
 
