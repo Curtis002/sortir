@@ -155,12 +155,12 @@ class SortieController extends AbstractController
 
         $sortieForm = $this->createForm(CreateSortieType::class, $sortie);
         $sortieForm->handleRequest($request);
-
+        //dd($request);
         if($sortieForm->isSubmitted() && $sortieForm->isValid())
         {
             // Si lieu existant
-            if ($request->request->get('create_sortie')['lieuSortie'] !== "") {
-                $idLieu = (int)$request->request->get('create_sortie')['lieuSortie'];
+            if ($request->request->get('create_sortie')['lieu'] !== "") {
+                $idLieu = (int)$request->request->get('create_sortie')['lieu'];
                 $lieu1 = $this->entityManager->getRepository(Lieu::class)->findOneById($idLieu);
             } else {
                 $lieu1->setNom($request->request->get('create_sortie')['lieux'][0]['nom']);
