@@ -58,13 +58,7 @@ class SortieController extends AbstractController
         }
 
         /////----test statutchecker-----////////
-        /// statut cloturee
-        $statutchecker->statutClotureeSortie($sorties, $entityManager);
-        /// statut en cours
-        $statutchecker->statutActivitéeEnCoursSortie($sorties, $entityManager);
-        /// statut terminée
-
-        /// statut archivé
+        $statutchecker->statutSetteurStatut($sorties, $entityManager);
         /////----test statutchecker-----////////
 
 
@@ -251,12 +245,6 @@ class SortieController extends AbstractController
     {
         //raz message
         $message = null;
-        /*1 En création
-        2 Ouverte
-        3 Cloturée
-        4 Activité en cours
-        5 Passée
-        6 Annulée*/
 
         $userconnecte = $this->getUser();
         //recup bien l utilisateurconnecte
@@ -305,8 +293,7 @@ class SortieController extends AbstractController
         $entityManager->flush();
         $this->addFlash('joinsucces', "Vous avez réussi votre inscription à la sortie \" " .$sortie->getNom() . "\" ! ");
     }
-
-        //todo penser a retourner vers la sortie surlaquelle on viens de s'inscrire ??
+        
         return $this->redirectToRoute('sortie_list', [
             'sorties' => $sorties]);
 
