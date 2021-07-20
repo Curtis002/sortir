@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Etat;
 use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Data\SearchData;
@@ -36,7 +37,7 @@ class SortieRepository extends ServiceEntityRepository
      /**
      * @return array
      */
-    public function findSearch(SearchData $search, Participant $participant): array
+    public function findSearch(SearchData $search, Participant $participant, Etat $etat): array
     {
         $queryBuilder = $this
             //récupère les sorties
@@ -63,8 +64,10 @@ class SortieRepository extends ServiceEntityRepository
         //Recherche par date
         if (!empty($search->dateDebut && $search->dateFin)) {
             $queryBuilder = $queryBuilder
-                ->andWhere('s.dateHeureDebut >= dateDebut')
-                ->andWhere('s.dateHeureDebut >= dateFin');
+                ->andWhere('s.dateHeureDebut >= :dateDebut')
+                ->andWhere('s.dateHeureDebut <= :dateFin')
+                ->setParameter('dateDebut', $search->dateDebut)
+                ->setParameter('dateFin', $search->dateFin);
         }
 
         //recherche checkbox
@@ -74,23 +77,23 @@ class SortieRepository extends ServiceEntityRepository
                 ->setParameter('organisateur', $participant->getId());
         }
 
-//        if (!empty($search->inscrit)) {
-//            $queryBuilder = $queryBuilder
-//                ->andWhere('s.participants = :inscrit')
-//                ->setParameter('inscrit', $participant->getInscritSortie());
-//        }
+        if (!empty($search->inscrit)) {
+            $queryBuilder = $queryBuilder
+                ->andWhere('s.id IN (:participant)')
+                ->setParameter('participant', $participant->getInscritSortie());
+        }
 
 //        if (!empty($search->notInscrit)) {
 //            $queryBuilder = $queryBuilder
-//                ->andWhere('s.notInscrit = :notInscrit')
-//                ->setParameter('notInscrit', $search->notInscrit);
+//                ->andWhere('s.id IN (:participant)')
+//                ->setParameter('participant', $participant->getInscritSortie());
 //        }
-//
-//        if (!empty($search->terminees)) {
-//            $queryBuilder = $queryBuilder
-//                ->andWhere('s.terminees > :terminees')
-//                ->setParameter('terminees', $search->dateFin);
-//        }
+
+        if (!empty($search->terminees)) {
+            $queryBuilder = $queryBuilder
+                ->andWhere('s.etatSortie = :passee')
+                ->setParameter('passee', $etat->getId());
+        }
 
         return $queryBuilder->getQuery()->getResult();
     }

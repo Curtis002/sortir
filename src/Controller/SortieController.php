@@ -45,12 +45,14 @@ class SortieController extends AbstractController
         $participant = $this->entityManager->getRepository(Participant::class)->find($current);
         //dump($participant);
 
+        $etat = $this->entityManager->getRepository(Etat::class)->find(5);
+
         $data = new SearchData();
         $sortieForm = $this->createForm(SearchType::class, $data);
         $sortieForm->handleRequest($request);
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
-            $sorties = $sortieRepository->findSearch($data, $participant);
+            $sorties = $sortieRepository->findSearch($data, $participant,$etat);
 
         } else {
             $sorties = $sortieRepository->findAll();
