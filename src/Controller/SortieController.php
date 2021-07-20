@@ -10,6 +10,7 @@ use App\Entity\Lieu;
 use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Entity\Ville;
+use App\Form\CancelSortieType;
 use App\Form\CreateSortieType;
 use App\Repository\ParticipantRepository;
 use App\Form\SearchType;
@@ -209,7 +210,6 @@ class SortieController extends AbstractController
      */
     public function delete($id): Response
     {
-        echo "passe ici";
         $sortie = $this->entityManager->getRepository(Sortie::class)->findOneById($id);
         dump($sortie);
         $this->entityManager->remove($sortie);
@@ -219,7 +219,30 @@ class SortieController extends AbstractController
 
     }
 
+    /**
+     * @Route("/annuler-sortie/{id}", name="cancel")
+     */
+    public function cancel($id, Request $request): Response
+    {
+        $sortie = $this->entityManager->getRepository(Sortie::class)->findOneById($id);
 
+        $cancelForm = $this->createForm(CancelSortieType::class, $sortie);
+        $cancelForm->handleRequest($request);
+
+        if ($cancelForm->isSubmitted() && $cancelForm->isValid()) {
+            $sortie->setEtatSortie($this->entityManager->getRepository(Etat::class)->findOneById(6));
+            $this->entityManager->persist($sortie);
+            $this->entityManager->flush();
+
+            return $this->redirectToRoute('sortie_list');
+        }
+
+        return $this->render('sortie/cancel.html.twig', [
+            'sortie' => $sortie,
+            "cancelForm" => $cancelForm->createView()
+        ]);
+
+    }
 
     /**
      * @Route("/join/{id}", name="join")
