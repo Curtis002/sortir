@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Data\SearchDataAdmin;
 use App\Entity\Participant;
 use App\Entity\Sortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -36,6 +37,19 @@ class ParticipantRepository extends ServiceEntityRepository
         $user->setPassword($newEncodedPassword);
         $this->_em->persist($user);
         $this->_em->flush();
+    }
+
+    public function findSearch4(SearchDataAdmin $search): array
+    {
+        $query = $this
+            ->createQueryBuilder('c');
+        if(!empty($search->q))
+        {
+            $query = $query
+                ->andWhere('c.nom LIKE :q')
+                ->setParameter('q', "%{$search->q}%");
+        }
+        return $query->getQuery()->getResult();
     }
 
     // /**

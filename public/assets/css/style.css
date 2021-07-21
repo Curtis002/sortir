@@ -1,3 +1,4 @@
+
 .custom-center{
     width: 80%;
 }
@@ -18,9 +19,6 @@
     width: 80%;
     float: right;
 }
-footer{
-    margin-top: 10px;
-}
 .div-hide{
     display: none;
 }
@@ -36,4 +34,29 @@ div.x-button {
     text-align: right;
     font-weight: bold;
     text-decoration: underline;
+}
+.custom-link {
+    color: black;
+    font-size: 13px;
+}
+.user-mobile{
+    display: none;
+}
+a:hover{
+    text-decoration: none;
+}
+
+@media screen and (max-width: 480px) {
+    .navbar-toggler {
+        display: none;
+    }
+    .user-mobile{
+        display: inherit;
+    }
+    .user-desktop{
+        display: none;
+    }
+    a:hover{
+        text-decoration: none;
+    }
 }

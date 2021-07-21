@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Participants {% endblock %}
+
+{% block body %}
+    <h1 class="text-center mt-3 mb-5">Participants</h1>
+    <div class="container">
+        {{ form_start(form) }}
+        <div class="row justify-content-md-center">
+            <div class="col-4">
+                {{ form_row(form.q) }}
+            </div>
+            <div class="col-xs-6">
+                <button type="submit" class="btn btn-info" name="recherche">Rechercher</button>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+    <div class="container">
+        <div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Pseudo</th>
+                    <th scope="col">Prénom</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Téléphone</th>
+                    <th scope="col">Mail</th>
+                    <th scope="col">Campus</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for participant in participants %}
+                    <tr>
+                        <td>{{ participant.pseudo }}</td>
+                        <td>{{ participant.prenom }}</td>
+                        <td>{{ participant.nom }}</td>
+                        <td>{{ participant.telephone }}</td>
+                        <td>{{ participant.mail }}</td>
+                        <td>{{ participant.campus.nom }}</td>
+                        <td><a href="{{ path('participant_update', {"id" : participant.id}) }}">Modifier</a> | <a href="{{ path('participant_delete', {"id" : participant.id}) }}" onclick="return confirm('Supprimer?')">Supprimer</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div>
+        <hr>
+    </div>
+    <div class="container">
+        <h3 class="h3">Ajouter un nouveau participant:</h3>
+            {{ form_start(partForm) }}
+            {{ form_widget(partForm) }}
+        <div>
+            <button type="submit" class="btn btn-info">Créer</button>
+            {{ form_end(partForm) }}
+        </div>
+    </div>
+{% endblock %}

@@ -3,104 +3,136 @@
 {% block title %}  Sorties {% endblock %}
 
 {% block body %}
-    <h1 class="text-center mt-3 mb-5">Liste des sorties</h1>
-    <div class="container">
-        {% for message in app.flashes('enregistree') %}
-            <div class="alert alert-success">
-                {{ message }}
-            </div>
-        {% endfor %}
-        {% for message in app.flashes('publiee') %}
-            <div class="alert alert-success">
-                {{ message }}
-            </div>
-        {% endfor %}
+    {# USER SUR ORDINATEUR ET TABLETTE #}
+    <div class="user-desktop">
+        <div class="container-fluid">
+            {% for message in app.flashes('enregistree') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            {% for message in app.flashes('publiee') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
 
-        <div class="container">
-        <div class="d-flex flex-column">
-            <div class="p-1">
-                <h5 class="info">Date du jour: {{ "now" | date("d/m/Y") }}</h5>
-                <div class="p-1">
-                </div>
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    <a href="{{ path('participant_edit', {'id': app.user.id}) }}" title="mon profil">
-                        <h5 class="info">Participant : {{ app.user.pseudo }}</h5>
-                    </a>
-                {% endif %}
+            <div class="container">
+                <div class="d-flex flex-column">
+                    <div class="p-1">
+                        <h6 class="info">Date du jour: {{ "now" | date("d/m/Y") }}</h6>
+                        <div class="p-1">
+                        </div>
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                            <a href="{{ path('participant_edit', {'id': app.user.id}) }}" title="mon profil">
+                                <h6 class="info">Participant : {{ app.user.pseudo }}</h6>
+                            </a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
+
+        <div class="row mb-5">
+                {% include 'sortie/filter.html.twig' %}
         </div>
 
-    <div class="row">
-            {% include 'sortie/filter.html.twig' %}
-        </div>
-        <div>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">Nom de la sortie</th>
-                    <th scope="col">Campus</th>
-                    <th scope="col">Date de la sortie</th>
-                    <th scope="col">Clôture</th>
-                    <th scope="col">Inscrits / Places</th>
-                    <th scope="col">Etat</th>
-                    <th scope="col">Inscrit</th>
-                    <th scope="col">Organisateur</th>
-                    <th scope="col">Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                    {% for sortie in sorties %}
-                        {% if sortie.etatSortie.libelle != "En création" and  sortie.etatSortie.libelle != "Archivée" or app.user == sortie.organisateur   %}
+            <div>
+                <table class="table">
+                    <thead>
                     <tr>
-                        <td>{{ sortie.nom }}</td>
-                        <td>{{ sortie.campus.nom }}</td>
-                        <td>{{ sortie.dateHeureDebut|format_datetime('short', 'none', locale='en') }}</td>
-                        <td>{{ sortie.dateLimiteInscription|format_datetime('short', 'none', locale='en') }}</td>
-                        <td>{{ sortie.participants|length }} / {{ sortie.nbInscriptionsMax }}</td>
-                        <td>{{ sortie.etatsortie.libelle }}</td>
-                        <td>{% set jesuisinscrit = false %}
-                        {% if sortie.participants.contains(app.user) %}
-                            {% set jesuisinscrit = true %}
-                            <input type="checkbox" value="inscrit"   disabled="disabled" checked readonly>
-                        {% endif %}
-                        </td>
-                        <td><a href="{{ path('participant_show', {'id': sortie.organisateur.id }) }}">{{ sortie.organisateur.nom }}</a></td>
-
-                        <td>
-                            {% if sortie.etatsortie.libelle != "En création" %}
-                                <a href="{{ path('sortie_detail', {'id': sortie.id}) }}">Afficher</a>
-                                {% if sortie.participants.contains(app.user) %}
-                                    {% set jesuisinscrit = true %}
-                                    {% if sortie.etatsortie.libelle == "Ouverte" and jesuisinscrit == true   %}
-                                        <a href="{{ path('sortie_escape', {'id' : sortie.id}) }}">Se désister</a>
-
-                                    {% elseif sortie.etatsortie.libelle == "Cloturée" and jesuisinscrit == true and date(sortie.dateLimiteInscription) > date() %}
-                                        <a href="{{ path('sortie_escape', {'id' : sortie.id}) }}">Se désister</a>
-                                    {% endif  %}
-                                {% elseif not sortie.participants.contains(app.user) %}
-                                    {% set jesuisinscrit = false %}
-                                    {% if sortie.etatsortie.libelle == "Ouverte" and jesuisinscrit == false  %}
-                                    <a href="{{ path('sortie_join', {'id' : sortie.id}) }}">S'inscrire</a>
-                                    {% endif %}
-                                {% endif %}
-
-
-                            {% elseif  (sortie.etatsortie.libelle == "En création") and sortie.organisateur == app.user %}
-                                <a href="{{ path('sortie_modifier_sortie', {'id' : sortie.id}) }}">Modifier</a>
-                            {% endif %}
-                        {% if sortie.etatSortie.libelle == "Ouverte" and sortie.organisateur == app.user %}
-                            <a href="{{ path('sortie_cancel', {'id' : sortie.id }) }}">Annuler</a>
-                        {% endif %}
-                                </td>
+                        <th scope="col" class="table-secondary">Sortie</th>
+                        <th scope="col" class="table-secondary">Campus</th>
+                        <th scope="col" class="table-secondary">Date</th>
+                        <th scope="col" class="table-secondary">Clôture</th>
+                        <th scope="col" class="table-secondary">Inscrits / Places</th>
+                        <th scope="col" class="table-secondary">Etat</th>
+                        <th scope="col" class="table-secondary">Inscrit</th>
+                        <th scope="col" class="table-secondary">Organisateur</th>
+                        <th scope="col" class="table-secondary">Actions</th>
                     </tr>
-                        {% endif %}
-                    {% endfor %}
+                    </thead>
+                    <tbody>
+                        {% for sortie in sorties %}
+                            {% if sortie.etatSortie.libelle != "En création" and  sortie.etatSortie.libelle != "Archivée" or app.user == sortie.organisateur   %}
+                        <tr>
+                            <td>{{ sortie.nom }}</td>
+                            <td>{{ sortie.campus.nom }}</td>
+                            <td>{{ sortie.dateHeureDebut|format_datetime('short', 'none', locale='en') }}</td>
+                            <td>{{ sortie.dateLimiteInscription|format_datetime('short', 'none', locale='en') }}</td>
+                            <td>{{ sortie.participants|length }} / {{ sortie.nbInscriptionsMax }}</td>
+                            <td>{{ sortie.etatsortie.libelle }}</td>
+                            <td>{% set jesuisinscrit = false %}
+                            {% if sortie.participants.contains(app.user) %}
+                                {% set jesuisinscrit = true %}
+                                <input type="checkbox" value="inscrit"   disabled="disabled" checked readonly>
+                            {% endif %}
+                            </td>
+                            <td><a href="{{ path('participant_show', {'id': sortie.organisateur.id }) }}">{{ sortie.organisateur.nom }}</a></td>
 
-                </tbody>
-            </table>
+                            <td>
+                                {% if sortie.etatsortie.libelle != "En création" %}
+                                    <a href="{{ path('sortie_detail', {'id': sortie.id}) }}">Afficher</a>
+                                    {% if sortie.participants.contains(app.user) %}
+                                        {% set jesuisinscrit = true %}
+                                        {% if sortie.etatsortie.libelle == "Ouverte" and jesuisinscrit == true   %}
+                                            <a href="{{ path('sortie_escape', {'id' : sortie.id}) }}">Se désister</a>
 
+                                        {% elseif sortie.etatsortie.libelle == "Cloturée" and jesuisinscrit == true and date(sortie.dateLimiteInscription) > date() %}
+                                            <a href="{{ path('sortie_escape', {'id' : sortie.id}) }}">Se désister</a>
+                                        {% endif  %}
+                                    {% elseif not sortie.participants.contains(app.user) %}
+                                        {% set jesuisinscrit = false %}
+                                        {% if sortie.etatsortie.libelle == "Ouverte" and jesuisinscrit == false  %}
+                                        <a href="{{ path('sortie_join', {'id' : sortie.id}) }}">S'inscrire</a>
+                                        {% endif %}
+                                    {% endif %}
+
+
+                                {% elseif  (sortie.etatsortie.libelle == "En création") and sortie.organisateur == app.user %}
+                                    <a href="{{ path('sortie_modifier_sortie', {'id' : sortie.id}) }}">Modifier</a>
+                                {% endif %}
+                            {% if (sortie.etatSortie.libelle == "Ouverte" and sortie.organisateur == app.user) or (is_granted("ROLE_ADMIN") and sortie.etatSortie.libelle != "Annulée" and sortie.etatSortie.libelle != "Archivée" and sortie.etatSortie.libelle != "Clôturée" ) %}
+                                <a href="{{ path('sortie_cancel', {'id' : sortie.id }) }}">Annuler</a>
+                            {% endif %}
+                                    </td>
+                        </tr>
+                            {% endif %}
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+                <div class="row ml-2 mt-3 mb-5">
+                    <a href="{{ path('sortie_create') }}" title="création"><button class="btn btn-info">Nouvelle sortie</button> </a>
+                </div>
+            </div>
         </div>
+    </div>
+
+    {# Version mobile #}
+
+    <div class="user-mobile">
+        <h3 class="mt-5 mb-4 ml-2">Mes sorties :</h3>
+        <table class="table ml-2 mr-2">
+            <thead>
+            <tr>
+                <th scope="col" class="table-secondary">Nom de la sortie</th>
+                <th scope="col" class="table-secondary">Date de la sortie</th>
+                <th scope="col" class="table-secondary">Lieu</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for sortie in sorties %}
+            {% if sortie.campus.nom == app.user.campus.nom %}
+            <tr>
+                <td><a href="{{ path('sortie_detail', {'id' : sortie.id}) }}">{{ sortie.nom }}</a></td>
+                <td>{{ sortie.dateHeureDebut|format_datetime('short', 'none', locale='en') }}</td>
+                <td>{{ sortie.lieu.ville.nom }}</td>
+            {% endif %}
+            {% endfor %}
+
+            </tbody>
+        </table>
+
     </div>
 
 {% endblock %}

@@ -2,8 +2,14 @@
 
 namespace App\Controller;
 
+use App\Data\SearchDataAdmin;
+use App\Data\SearchDataParticipant;
 use App\Entity\Participant;
+use App\Form\CreateParticipantType;
 use App\Form\ProfilType;
+use App\Form\RegistrationFormType;
+use App\Form\SearchDataType;
+use App\Repository\ParticipantRepository;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -115,5 +121,71 @@ class ProfilController extends AbstractController
         return $this->render('profil/profilDetails.html.twig', [
             'participant' => $participant,
         ]);
+    }
+
+    /**
+     * @Route("/participants", name="participants_list")
+     */
+    public function list(ParticipantRepository $participantRepository,
+                         Request $request,
+                         EntityManagerInterface $entityManager): Response
+    {
+        $participants = new Participant();
+        $partForm = $this->createForm(CreateParticipantType::class, $participants);
+
+        $partForm->handleRequest($request);
+
+        if($partForm->isSubmitted() && $partForm->isValid())
+        {
+            $entityManager->persist($participants);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Un nouveau participant a été ajouté avec succès!');
+            return $this->redirectToRoute("participants_list");
+        }
+
+        $data = new SearchDataAdmin();
+        $form = $this->createForm(SearchDataType::class, $data);
+        $form->handleRequest($request);
+        $participants = $participantRepository->findSearch4($data);
+
+        return $this->render('admin/participants.html.twig', [
+            'partForm' => $partForm->createView(),
+            'participants' => $participants,
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/participant/update/{id}", name="participant_update")
+     */
+    public function update(Participant $id, Request $request):Response
+    {
+
+        $partForm = $this->createForm(CreateParticipantType::class, $id);
+        $partForm->handleRequest($request);
+        if($partForm->isSubmitted() && $partForm->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+
+            $this->addFlash('success', 'Les informations ont été modifié avec succès!');
+            return $this->redirectToRoute("participants_list");
+        }
+        return $this->render('admin/updateParticipant.html.twig', [
+            'partForm' => $partForm->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/participant/delete/{id}", name="participant_delete")
+     */
+    public function delete(Participant $id): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($id);
+        $em->flush();
+
+        return $this->redirectToRoute("participants_list");
     }
 }

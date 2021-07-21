@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Participants {% endblock %}
+
+{% block body %}
+    <h1 class="text-center mt-3 mb-5">Modifier les informations du participant</h1>
+    <div class="container">
+        {{ form_start(partForm) }}
+       {# {{ form_widget(partForm) }} #}
+        {{ form_row(partForm.pseudo) }}
+        {{ form_row(partForm.prenom) }}
+        {{ form_row(partForm.nom) }}
+        {{ form_row(partForm.telephone) }}
+        {{ form_row(partForm.mail) }}
+        {{ form_row(partForm.campus) }}
+{#        {{ form_row(partForm.motPasse) }}#}
+        {{ form_row(partForm.motPasse, { 'attr':{'disabled':'disabled'}}) }}
+        {{ form_row(partForm.roles) }}
+        {{ form_row(partForm.actif) }}
+        <div>
+            <button type="submit" class="btn btn-info">Modifier</button>
+            {{ form_end(partForm) }}
+        </div>
+    </div>
+{% endblock %}
