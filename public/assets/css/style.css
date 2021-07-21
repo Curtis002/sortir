@@ -1,7 +1,4 @@
-body {
-    position: relative;
-    min-height: 100vh;
-}
+
 .custom-center{
     width: 80%;
 }
@@ -21,14 +18,6 @@ body {
 #avatar-profil{
     width: 80%;
     float: right;
-}
-footer{
-    text-align: center;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    padding: 15px 0;
-    margin-top: 50px;
 }
 .div-hide{
     display: none;

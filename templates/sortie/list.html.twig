@@ -91,7 +91,7 @@
                                 {% elseif  (sortie.etatsortie.libelle == "En création") and sortie.organisateur == app.user %}
                                     <a href="{{ path('sortie_modifier_sortie', {'id' : sortie.id}) }}">Modifier</a>
                                 {% endif %}
-                            {% if sortie.etatSortie.libelle == "Ouverte" and sortie.organisateur == app.user %}
+                            {% if (sortie.etatSortie.libelle == "Ouverte" and sortie.organisateur == app.user) or (is_granted("ROLE_ADMIN") and sortie.etatSortie.libelle != "Annulée" and sortie.etatSortie.libelle != "Archivée" and sortie.etatSortie.libelle != "Clôturée" ) %}
                                 <a href="{{ path('sortie_cancel', {'id' : sortie.id }) }}">Annuler</a>
                             {% endif %}
                                     </td>
