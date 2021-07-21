@@ -12,9 +12,10 @@
         {{ form_row(partForm.telephone) }}
         {{ form_row(partForm.mail) }}
         {{ form_row(partForm.campus) }}
-        {{ form_row(partForm.motPasse) }}
-{#        {{ form_row(partForm.motPasse, { 'attr':{'disabled':'disabled'}}) }}#}
-
+{#        {{ form_row(partForm.motPasse) }}#}
+        {{ form_row(partForm.motPasse, { 'attr':{'disabled':'disabled'}}) }}
+        {{ form_row(partForm.roles) }}
+        {{ form_row(partForm.actif) }}
         <div>
             <button type="submit" class="btn btn-info">Modifier</button>
             {{ form_end(partForm) }}
