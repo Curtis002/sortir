@@ -42,7 +42,7 @@ class SearchType extends AbstractType
                 'widget' => 'single_text',
             ])
             ->add('dateFin', DateType::class, [
-                'label' => false,
+                'label' => 'et',
                 'html5' => true,
                 'required' => false,
                 'widget' => 'single_text',
