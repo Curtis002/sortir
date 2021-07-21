@@ -5,50 +5,36 @@
         {% else %}
             <a class="navbar-brand" href="{{ path('app_login') }}">Sortir.com</a>
         {% endif %}
+        {% if app.user %}
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {% if app.user %}
+                {% if is_granted("ROLE_ADMIN") %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('city_list') }}" title="cities">Villes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('campus_list') }}" title="campus">Campus</a>
+                    </li>
+                {% endif %}
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{ path('sortie_list') }}" title="home">Accueil</a>
+                    <a class="nav-link" href="{{ path('sortie_list') }}" title="liste des sorties">Liste des sorties</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('participant_edit', {'id': app.user.id}) }}" title="mon profil">Mon profil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('sortie_list') }}" title="liste des sorties">Liste des sorties</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('sortie_create') }}" title="création">Nouvelle sortie</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="{{ path('app_logout') }}" title="logout">Se déconnecter</a>
                 </li>
 
-                 {% if is_granted("ROLE_ADMIN") %}
-                     <li class="nav-item">
-                         <a class="nav-link" href="{{ path('campus_list') }}" title="campus">Campus</a>
-                     </li>
-                     <li class="nav-item">
-                         <a class="nav-link" href="{{ path('city_list') }}" title="cities">Villes</a>
-                     </li>
-                 {% endif %}
 
 
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{ path('app_login') }}" title="home">Accueil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_register') }}" title="register">Créer un compte</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_login') }}" title="login">Se connecter</a>
-                </li>
                 {% endif %}
             </ul>
         </div>
+        {% endif %}
     </div>
 </nav>

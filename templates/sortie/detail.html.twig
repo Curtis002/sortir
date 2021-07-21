@@ -3,11 +3,14 @@
 {% block body %}
     <div class="container">
         <h1 class="text-center mt-3 mb-5">{{ sorties.nom }}</h1>
+        <div class="user-mobile mb-3">
+            <a href="{{ path('sortie_list') }}">Retour</a>
+        </div>
         {% if sorties.etatSortie == 'Annulée' %}
         <div class="alert alert-danger">La sortie est annulée. Motif : {{ sorties.motif }}</div>
         {% endif %}
         <div class="row mb-5">
-            <div class="col-md-6">
+            <div class="col-md-6 mb-4">
                 <h4 class="mb-3">Infos pratiques :</h4>
                 <div class="card" >
                     <ul class="list-group list-group-flush">
@@ -55,7 +58,8 @@
                         {% for p in sorties.participants %}
                             <tbody>
                             <tr>
-                                <td><a href="{{ path('participant_show', {'id': p.id }) }}">{{ p.pseudo }}</a></td>
+                                <td class="user-desktop"><a href="{{ path('participant_show', {'id': p.id }) }}">{{ p.pseudo }}</a></td>
+                                <td class="user-mobile">{{ p.pseudo }}</td>
                                 <td>{{ p.nom }}</td>
                             </tr>
                             </tbody>

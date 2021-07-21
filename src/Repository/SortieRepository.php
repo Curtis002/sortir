@@ -83,11 +83,11 @@ class SortieRepository extends ServiceEntityRepository
                 ->setParameter('participant', $participant->getInscritSortie());
         }
 
-//        if (!empty($search->notInscrit)) {
-//            $queryBuilder = $queryBuilder
-//                ->andWhere('s.id IN (:participant)')
-//                ->setParameter('participant', $participant->getInscritSortie());
-//        }
+        if (!empty($search->notInscrit)) {
+            $queryBuilder = $queryBuilder
+                ->andWhere('s.id NOT IN (:participant)')
+                ->setParameter('participant', $participant->getInscritSortie());
+        }
 
         if (!empty($search->terminees)) {
             $queryBuilder = $queryBuilder
