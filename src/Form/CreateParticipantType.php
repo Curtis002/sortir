@@ -8,7 +8,6 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
 class CreateParticipantType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -27,6 +26,7 @@ class CreateParticipantType extends AbstractType
             ])
             ->add('motPasse')
             //->add('roles')
+
         ;
     }
 

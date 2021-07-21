@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     photo_profil_directory: '%kernel.project_dir%/public/img/avatar'
+    upload_directory: '%kernel.project_dir%/public/import'
 
 services:
     # default configuration for services in *this* file
@@ -33,3 +34,4 @@ services:
     App\Service\FileUploader:
         arguments:
             $targetDirectory: '%photo_profil_directory%'
+            $uploadDirectory: '%upload_directory%'
