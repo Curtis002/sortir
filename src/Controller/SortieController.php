@@ -43,6 +43,7 @@ class SortieController extends AbstractController
     public function list(SortieRepository $sortieRepository,EntityManagerInterface $entityManager, Request $request, Statutchecker $statutchecker)
     {
         $current = $this->getUser();
+
         $participant = $this->entityManager->getRepository(Participant::class)->find($current);
         //dump($participant);
 
