@@ -64,10 +64,15 @@ class CreateSortieType extends AbstractType
 //                'choice_label' => 'libelle',
 //                'placeholder' => '--Choisir un état--'
 //            ])
-            ->add('lieux', CollectionType::class, [
-                'entry_type' => LieuType::class,
-                'entry_options' => ['label' => false],
-                'required' => false
+                // fonctionne
+//            ->add('lieux', CollectionType::class, [
+//                'entry_type' => LieuType::class,
+//                'entry_options' => ['label' => false],
+//                'required' => false
+//            ])
+            ->add('lieux', LieuType::class, [
+                'required' => false,
+                'mapped' => false
             ])
         ;
     }

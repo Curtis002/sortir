@@ -83,31 +83,84 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route("/modifier-sortie/{id}", name="modifier_sortie")
+     * @Route ("/create", name="create")
      */
-    public function modify(int $id, Request $request): Response
+
+    public function create(
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): Response
     {
-        $sortie = $this->entityManager->getRepository(Sortie::class)->findOneById($id);
+        $sortie = new Sortie();
 
-        $lieu1 = new Lieu();
-        $lieux = new ArrayCollection();
-        $lieux->add($lieu1);
+        // Récupération de l'id de l'utilisateur en cours
+        $organisateur = $this->getUser()->getId();
+        $sortie->setOrganisateur($this->entityManager->getRepository(Participant::class)->findOneById($organisateur));
 
-        $sortie->setLieux($lieux);
+        // Récupération du campus de l'utilisateur
+        $campus = $this->getUser()->getCampus();
+        $sortie->setCampus($this->entityManager->getRepository(Campus::class)->findOneById($campus));
 
         $sortieForm = $this->createForm(CreateSortieType::class, $sortie);
         $sortieForm->handleRequest($request);
 
+        // Récupération du lieu du formulaire imbriqué
+        $lieuInsere = $sortieForm->get('lieux')->getData();
+
+        if($sortieForm->isSubmitted() && $sortieForm->isValid())
+        {
+            // Si on est dans le cas d'une insertion d'un nouveau lieu
+            if ($lieuInsere != null ) {
+                $this->entityManager->persist($lieuInsere);
+                $sortie->setLieu($lieuInsere);
+            }
+
+            // Savoir si on enregistre ou publie la sortie
+            $clicked = $request->request->get('clicked');
+
+            if ($clicked == 'enregistrer') {
+                $sortie->setEtatSortie($this->entityManager->getRepository(Etat::class)->findOneById(1));
+                $message = "Votre sortie a bien été enregistrée";
+                $this->addFlash('enregistree', $message);
+            } else {
+                $sortie->setEtatSortie($this->entityManager->getRepository(Etat::class)->findOneById(2));
+                $message = "Votre sortie a bien été publiée";
+                $this->addFlash('publiee', $message);
+            }
+
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('sortie_list');
+        }
+
+        return $this->render('sortie/create.html.twig'
+            , [
+                'sortieForm' => $sortieForm->createView(),
+
+            ]);
+    }
+
+    /**
+     * @Route("/modifier-sortie/{id}", name="modifier_sortie")
+     */
+    public function modify(int $id, Request $request): Response
+    {
+        // Récupération de la sortie
+        $sortie = $this->entityManager->getRepository(Sortie::class)->findOneById($id);
+
+        $sortieForm = $this->createForm(CreateSortieType::class, $sortie);
+        $sortieForm->handleRequest($request);
+
+        // Récupération du lieu du formulaire imbriqué
+        $lieuInsere = $sortieForm->get('lieux')->getData();
+
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
-            //dd($request);
-            // Si lieu existant
-            if ($request->request->get('create_sortie')['lieux'][0]["nom"] !== "") {
-                $lieu1->setNom($request->request->get('create_sortie')['lieux'][0]['nom']);
-                $lieu1->setRue($request->request->get('create_sortie')['lieux'][0]['rue']);
-                $idVille = (int)($request->request->get('create_sortie')['ville']);
-                $lieu1->setVille($this->entityManager->getRepository(Ville::class)->findOneById($idVille));
-                $this->entityManager->persist($lieu1);
-                $sortie->setLieu($lieu1);
+
+            // Si on est dans le cas d'une insertion d'un nouveau lieu
+            if ($lieuInsere != null ) {
+                $this->entityManager->persist($lieuInsere);
+                $sortie->setLieu($lieuInsere);
             }
 
             // Savoir si on enregistre ou publie la sortie
@@ -132,72 +185,6 @@ class SortieController extends AbstractController
         return $this->render('sortie/create.html.twig', [
             'sortie' => $sortie,
             "sortieForm" => $sortieForm->createView()
-        ]);
-    }
-
-
-    /**
-     * @Route ("/create", name="create")
-     */
-
-    public function create(
-        Request $request,
-        EntityManagerInterface $entityManager
-    ): Response
-    {
-        $sortie = new Sortie();
-
-        $lieu1 = new Lieu();
-        $sortie->getLieux()->add($lieu1);
-
-        $sortie->setDateHeureDebut(new \DateTime());
-        $organisateur = $this->getUser()->getId();
-        $sortie->setOrganisateur($this->entityManager->getRepository(Participant::class)->findOneById($organisateur));
-        $campus = $this->getUser()->getCampus();
-        $sortie->setCampus($this->entityManager->getRepository(Campus::class)->findOneById($campus));
-
-        $sortieForm = $this->createForm(CreateSortieType::class, $sortie);
-        $sortieForm->handleRequest($request);
-        //dd($request);
-        if($sortieForm->isSubmitted() && $sortieForm->isValid())
-        {
-            // Si lieu existant
-            if ($request->request->get('create_sortie')['lieu'] !== "") {
-                $idLieu = (int)$request->request->get('create_sortie')['lieu'];
-                $lieu1 = $this->entityManager->getRepository(Lieu::class)->findOneById($idLieu);
-            } else {
-                $lieu1->setNom($request->request->get('create_sortie')['lieux'][0]['nom']);
-                $lieu1->setRue($request->request->get('create_sortie')['lieux'][0]['rue']);
-                $idVille = (int)($request->request->get('create_sortie')['ville']);
-                $lieu1->setVille($this->entityManager->getRepository(Ville::class)->findOneById($idVille));
-            }
-
-            // Savoir si on enregistre ou publie la sortie
-            $clicked = $request->request->get('clicked');
-
-            if ($clicked == 'enregistrer') {
-                $sortie->setEtatSortie($this->entityManager->getRepository(Etat::class)->findOneById(1));
-                $message = "Votre sortie a bien été enregistrée";
-                $this->addFlash('enregistree', $message);
-            } else {
-                $sortie->setEtatSortie($this->entityManager->getRepository(Etat::class)->findOneById(2));
-                $message = "Votre sortie a bien été publiée";
-                $this->addFlash('publiee', $message);
-            }
-
-            $entityManager->persist($lieu1);
-            $sortie->setLieu($lieu1);
-            dump($sortie);
-            $entityManager->persist($sortie);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('sortie_list');
-        }
-
-        return $this->render('sortie/create.html.twig'
-        , [
-                'sortieForm' => $sortieForm->createView(),
-
         ]);
     }
 

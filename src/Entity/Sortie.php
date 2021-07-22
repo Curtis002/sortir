@@ -13,26 +13,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Sortie
 {
-    protected $lieux;
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getLieux(): ArrayCollection
-    {
-        return $this->lieux;
-    }
-
-    /**
-     * @param ArrayCollection $lieux
-     */
-    public function setLieux(ArrayCollection $lieux): void
-    {
-        $this->lieux = $lieux;
-    }
-
-
-
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -116,7 +96,6 @@ class Sortie
     public function __construct()
     {
         $this->participants = new ArrayCollection();
-        $this->lieux = new ArrayCollection();
     }
 
     public function getId(): ?int
