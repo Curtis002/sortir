@@ -60,3 +60,26 @@ a:hover{
         text-decoration: none;
     }
 }
+
+/* Mode sombre */
+@media (prefers-color-scheme: dark) {
+    body{
+        background-color: #1c1c1e;
+        color: #fefefe;
+    }
+    a {
+        color: #5fa9ee;
+    }
+    .info, .table{
+        color: #fefefe;
+    }
+    .icon{
+        filter: invert(100%);
+    }
+    .table-secondary, .list-group-item{
+        color: #1c1c1e;
+    }
+    img {
+        filter: grayscale(20%);
+    }
+}

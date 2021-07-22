@@ -125,7 +125,7 @@ class ProfilController extends AbstractController
     }
 
     /**
-     * @Route("/participants", name="participants_list")
+     * @Route("/admin/participants", name="participants_list")
      */
     public function list(ParticipantRepository $participantRepository,
                          Request $request,
@@ -181,7 +181,7 @@ class ProfilController extends AbstractController
 
 
     /**
-     * @Route("/participant/update/{id}", name="participant_update")
+     * @Route("/admin/participant/update/{id}", name="participant_update")
      */
     public function update(Participant $id, Request $request):Response
     {
@@ -202,7 +202,7 @@ class ProfilController extends AbstractController
     }
 
     /**
-     * @Route("/participant/delete/{id}", name="participant_delete")
+     * @Route("/admin/participant/delete/{id}", name="participant_delete")
      */
     public function delete(Participant $id): Response
     {

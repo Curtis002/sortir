@@ -19,7 +19,7 @@ class CitiesController extends AbstractController
     private $em;
 
     /**
-     * @Route("/city", name="city_list")
+     * @Route("/admin/city", name="city_list")
      */
     public function list(VilleRepository $villeRepository,
                          Request $request,
@@ -32,8 +32,20 @@ class CitiesController extends AbstractController
 
         $cityForm->handleRequest($request);
 
-        if($cityForm->isSubmitted() && $cityForm->isValid())
+        if ($cityForm->isSubmitted() && $cityForm->isValid())
         {
+
+            for ($i = 0; $i <= count($cities) - 1; $i++)
+            {
+                $citi = $cities[$i];
+                if ( $citi->getNom() == $cityForm->getData()->getNom())
+                {
+                    $messageErrorVille = 'Votre ville existe déjà';
+                    $this->addFlash('errorVille', $messageErrorVille );
+                    return $this->redirectToRoute("city_list");
+                }
+            }
+
             $entityManager->persist($city);
             $entityManager->flush();
 
@@ -55,7 +67,7 @@ class CitiesController extends AbstractController
     }
 
     /**
-     * @Route("/city/update/{id}", name="city_update")
+     * @Route("/admin/city/update/{id}", name="city_update")
      */
     public function update(Ville $id, Request $request):Response
     {
@@ -75,7 +87,7 @@ class CitiesController extends AbstractController
     }
 
     /**
-     * @Route("/city/delete/{id}", name="city_delete")
+     * @Route("/admin/city/delete/{id}", name="city_delete")
      */
     public function delete(Ville $id): Response
     {

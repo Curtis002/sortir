@@ -20,7 +20,7 @@ class CampusController extends AbstractController
 {
 
     /**
-     * @Route("/campus", name="campus_list")
+     * @Route("/admin/campus", name="campus_list")
      */
     public function list(CampusRepository $campusRepository,
                          Request $request,
@@ -35,6 +35,17 @@ class CampusController extends AbstractController
 
         if($campForm->isSubmitted() && $campForm->isValid())
         {
+            for ($i = 0; $i <= count($allCampus) - 1; $i++)
+            {
+                $camp = $allCampus[$i];
+                if ( $camp->getNom() == $campForm->getData()->getNom())
+                {
+                    $messageErrorCampus = 'Votre campus existe déjà';
+                    $this->addFlash('errorCampus', $messageErrorCampus );
+                    return $this->redirectToRoute("campus_list");
+                }
+            }
+
             $entityManager->persist($campus);
             $entityManager->flush();
 
@@ -56,7 +67,7 @@ class CampusController extends AbstractController
     }
 
     /**
-     * @Route("/campus/update/{id}", name="campus_update")
+     * @Route("/admin/campus/update/{id}", name="campus_update")
      */
     public function update(Campus $id, Request $request):Response
     {
@@ -77,7 +88,7 @@ class CampusController extends AbstractController
     }
 
     /**
-     * @Route("/campus/delete/{id}", name="campus_delete")
+     * @Route("/admin/campus/delete/{id}", name="campus_delete")
      */
     public function delete(Campus $id): Response
     {
