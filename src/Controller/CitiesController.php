@@ -38,14 +38,14 @@ class CitiesController extends AbstractController
             for ($i = 0; $i <= count($cities) - 1; $i++)
             {
                 $citi = $cities[$i];
-                if ( $citi->getNom() == $cityForm->getData()->getNom())
+                if ( strtolower($citi->getNom()) == strtolower($cityForm->getData()->getNom()))
                 {
                     $messageErrorVille = 'Votre ville existe déjà';
                     $this->addFlash('errorVille', $messageErrorVille );
                     return $this->redirectToRoute("city_list");
                 }
             }
-
+            $cityForm->getData()->setNom(ucfirst(strtolower($cityForm->getData()->getNom())));
             $entityManager->persist($city);
             $entityManager->flush();
 

@@ -38,14 +38,14 @@ class CampusController extends AbstractController
             for ($i = 0; $i <= count($allCampus) - 1; $i++)
             {
                 $camp = $allCampus[$i];
-                if ( $camp->getNom() == $campForm->getData()->getNom())
+                if ( strtolower($camp->getNom()) == strtolower($campForm->getData()->getNom()))
                 {
                     $messageErrorCampus = 'Votre campus existe déjà';
                     $this->addFlash('errorCampus', $messageErrorCampus );
                     return $this->redirectToRoute("campus_list");
                 }
             }
-
+            $campForm->getData()->setNom(ucfirst(strtolower($campForm->getData()->getNom())));
             $entityManager->persist($campus);
             $entityManager->flush();
 
