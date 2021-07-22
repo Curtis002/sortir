@@ -32,8 +32,20 @@ class CitiesController extends AbstractController
 
         $cityForm->handleRequest($request);
 
-        if($cityForm->isSubmitted() && $cityForm->isValid())
+        if ($cityForm->isSubmitted() && $cityForm->isValid())
         {
+
+            for ($i = 0; $i <= count($cities) - 1; $i++)
+            {
+                $citi = $cities[$i];
+                if ( $citi->getNom() == $cityForm->getData()->getNom())
+                {
+                    $messageErrorVille = 'Votre ville existe déjà';
+                    $this->addFlash('errorVille', $messageErrorVille );
+                    return $this->redirectToRoute("city_list");
+                }
+            }
+
             $entityManager->persist($city);
             $entityManager->flush();
 
