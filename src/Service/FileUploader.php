@@ -12,11 +12,13 @@ class FileUploader
 {
 
     private $targetDirectory;
+    private $uploadDirectory;
     private $slugger;
 
-    public function __construct($targetDirectory, SluggerInterface $slugger)
+    public function __construct($targetDirectory, $uploadDirectory, SluggerInterface $slugger)
     {
         $this->targetDirectory = $targetDirectory;
+        $this->uploadDirectory = $uploadDirectory;
         $this->slugger = $slugger;
     }
 
@@ -35,9 +37,29 @@ class FileUploader
         return $fileName;
     }
 
+    public function uploadBis(UploadedFile $file)
+    {
+        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $safeFilename = $this->slugger->slug($originalFilename);
+        $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
+
+        try {
+            $file->move($this->getUploadDirectory(), $fileName);
+        } catch (FileException $e) {
+            // ... handle exception if something happens during file upload
+        }
+
+        return $fileName;
+    }
+
     public function getTargetDirectory()
     {
         return $this->targetDirectory;
+    }
+
+    public function getUploadDirectory()
+    {
+        return $this->uploadDirectory;
     }
 
 

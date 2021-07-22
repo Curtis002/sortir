@@ -40,7 +40,9 @@
                         <td>{{ participant.telephone }}</td>
                         <td>{{ participant.mail }}</td>
                         <td>{{ participant.campus.nom }}</td>
-                        <td><a href="{{ path('participant_update', {"id" : participant.id}) }}">Modifier</a> | <a href="{{ path('participant_delete', {"id" : participant.id}) }}" onclick="return confirm('Supprimer?')">Supprimer</a></td>
+                        <td><a href="{{ path('participant_update', {"id" : participant.id}) }}">Modifier</a> | <a
+                                    href="{{ path('participant_delete', {"id" : participant.id}) }}"
+                                    onclick="return confirm('Supprimer?')">Supprimer</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -52,11 +54,21 @@
     </div>
     <div class="container">
         <h3 class="h3">Ajouter un nouveau participant:</h3>
-            {{ form_start(partForm) }}
-            {{ form_widget(partForm) }}
+        {{ form_start(partForm) }}
+        {{ form_widget(partForm) }}
         <div>
             <button type="submit" class="btn btn-info">Créer</button>
             {{ form_end(partForm) }}
         </div>
     </div>
+    <div class="container">
+        <h3 class="h3">Ajouter des nouveaux participants à partir d'un fichier (.csv, .txt, .xlsx) :</h3>
+        {{ form_start(uploadForm) }}
+        {{ form_row(uploadForm.uploadUserFile) }}
+        <div class="form-group">
+            {{ form_widget(uploadForm.send, {'label': "Télécharger le fichier", 'attr' : { 'class': 'btn btn-info' }}) }}
+        </div>
+        {{ form_end(uploadForm) }}
+    </div>
+
 {% endblock %}

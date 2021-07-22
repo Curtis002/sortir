@@ -9,6 +9,7 @@ use App\Form\CreateParticipantType;
 use App\Form\ProfilType;
 use App\Form\RegistrationFormType;
 use App\Form\SearchDataType;
+use App\Form\UploadUserType;
 use App\Repository\ParticipantRepository;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
@@ -128,7 +129,10 @@ class ProfilController extends AbstractController
      */
     public function list(ParticipantRepository $participantRepository,
                          Request $request,
-                         EntityManagerInterface $entityManager): Response
+                         EntityManagerInterface $entityManager,
+                         FileUploader $fileUploader
+    ): Response
+
     {
         $participants = new Participant();
         $partForm = $this->createForm(CreateParticipantType::class, $participants);
@@ -149,12 +153,32 @@ class ProfilController extends AbstractController
         $form->handleRequest($request);
         $participants = $participantRepository->findSearch4($data);
 
+        $uploadForm = $this->createForm(UploadUserType::class);
+        $uploadForm->handleRequest($request);
+
+        if ($uploadForm->isSubmitted() && $uploadForm->isValid())
+        {
+            $uploadPartFile = $uploadForm['uploadUserFile']->getData();
+            if ($uploadPartFile)
+            {
+                $uploadPart = $fileUploader->uploadBis($uploadPartFile);
+                if (null !== $uploadPart)
+                {
+                    $directory = $fileUploader->getUploadDirectory();
+                    $fullpath = $directory.'/'.$uploadPart;
+                }
+            }
+        }
+
         return $this->render('admin/participants.html.twig', [
             'partForm' => $partForm->createView(),
             'participants' => $participants,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'uploadForm' => $uploadForm->createView(),
         ]);
     }
+
+
 
     /**
      * @Route("/participant/update/{id}", name="participant_update")
@@ -188,4 +212,5 @@ class ProfilController extends AbstractController
 
         return $this->redirectToRoute("participants_list");
     }
+
 }

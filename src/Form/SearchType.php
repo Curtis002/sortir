@@ -46,6 +46,7 @@ class SearchType extends AbstractType
                 'html5' => true,
                 'required' => false,
                 'widget' => 'single_text',
+
             ])
             ->add('organisateur', CheckboxType::class, [
                 'label' => 'Sortie dont je suis l\'organisateur',
