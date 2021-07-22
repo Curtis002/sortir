@@ -45,8 +45,11 @@
                     <div class="row" id="toggle">
                         <div class="col-md-12">
                             {{ form_row(sortieForm.lieux.nom) }}
-                            {{ form_row(sortieForm.lieux.rue) }}
-                            {{ form_row(sortieForm.lieux.ville) }}
+                            {{ form_row(sortieForm.lieux.rue, {'id': 'searchRueInput'}) }}
+                            {{ form_row(sortieForm.lieux.ville, {'id': 'villeLieuxInput', 'text': '', 'selected': ''}) }}
+
+                            <script src="/sortir/public/assets/js/scriptApiLieux.js" type="text/javascript" ></script>
+
                         </div>
                     </div>
             </div>
