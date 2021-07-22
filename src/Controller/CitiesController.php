@@ -19,7 +19,7 @@ class CitiesController extends AbstractController
     private $em;
 
     /**
-     * @Route("/city", name="city_list")
+     * @Route("/admin/city", name="city_list")
      */
     public function list(VilleRepository $villeRepository,
                          Request $request,
@@ -55,7 +55,7 @@ class CitiesController extends AbstractController
     }
 
     /**
-     * @Route("/city/update/{id}", name="city_update")
+     * @Route("/admin/city/update/{id}", name="city_update")
      */
     public function update(Ville $id, Request $request):Response
     {
@@ -75,7 +75,7 @@ class CitiesController extends AbstractController
     }
 
     /**
-     * @Route("/city/delete/{id}", name="city_delete")
+     * @Route("/admin/city/delete/{id}", name="city_delete")
      */
     public function delete(Ville $id): Response
     {

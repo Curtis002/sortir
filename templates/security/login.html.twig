@@ -11,6 +11,12 @@
                     Bonjour, {{ app.user.username }}, vous êtes déjà connecté. Pour vous déconnecter, <a href="{{ path('app_logout') }}">cliquez ici</a>
                 </div>
             {% endif %}
+            {% if error %}
+                <div class="alert alert-danger">
+                    <span class="initialism form-error-icon badge badge-danger">Error</span>
+                    <span class="form-error-message">Identifiant/Mot de passe incorrect</span>
+                </div>
+            {% endif %}
 
             <h1 class="text-center mt-3 mb-5">Bienvenue</h1>
 
