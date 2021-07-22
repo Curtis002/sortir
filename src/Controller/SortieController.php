@@ -47,7 +47,8 @@ class SortieController extends AbstractController
         $participant = $this->entityManager->getRepository(Participant::class)->find($current);
 
         if ($participant->getActif() == false) {
-            return $this->render('security/InactifParticipant.html.twig');
+            $participant->setRoles(["ROLE_INACTIF"]);
+
         }
 
         $etat = $this->entityManager->getRepository(Etat::class)->find(5);
