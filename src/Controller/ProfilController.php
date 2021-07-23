@@ -120,6 +120,12 @@ class ProfilController extends AbstractController
 
         if($partForm->isSubmitted() && $partForm->isValid())
         {
+            //dd($partForm->get('roles')->getData());
+            if ($partForm->get('roles')->getData()[0] == "ROLE_USER"){
+                $participantManu->setRoles(['ROLE_USER']);
+            } else {
+                $participantManu->setRoles(['ROLE_ADMIN']);
+            }
             $participantManu->setMotPasse(
                 $passwordEncoder->encodePassword(
                     $participantManu,
