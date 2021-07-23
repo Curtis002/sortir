@@ -20,6 +20,7 @@ class LieuController extends AbstractController
         return $this->render('lieu/index.html.twig');
     }
 
+    // Ajouter un lieu
     /**
      * @Route("/lieu/ajouter", name="lieu_add")
      */

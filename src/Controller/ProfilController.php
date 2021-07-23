@@ -30,33 +30,7 @@ class ProfilController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-//    /**
-//     * @Route("/mon-profil", name="profil")
-//     */
-//    public function modifier(Request $request, UserPasswordEncoderInterface $encoder): Response
-//    {
-//        $participant = $this->getUser();
-//        $form = $this->createForm(ProfilType::class, $participant);
-//
-//        $form->handleRequest($request);
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $old_pwd = $form->get('oldPassword')->getData();
-//            if ($encoder->isPasswordValid($participant, $old_pwd)) {
-//                $new_pwd = $form->get('newPassword')->getData();
-//                $password = $encoder->encodePassword($participant, $new_pwd);
-//
-//                $participant->setPassword($password);
-//                $this->entityManager->flush();
-//
-//            }
-//        }
-//
-//        return $this->render('profil/profil.html.twig', [
-//            'profilForm' => $form->createView()
-//                ]
-//        );
-//    }
-
+    // Editer un profil
     /**
      * @Route("mon-profil/{id}/edit", name="participant_edit", methods={"GET","POST"})
      */
@@ -114,6 +88,7 @@ class ProfilController extends AbstractController
         ]);
     }
 
+    // Afficher un profil
     /**
      * @Route("mon-profil/{id}", name="participant_show", methods={"GET"})
      */
@@ -124,6 +99,7 @@ class ProfilController extends AbstractController
         ]);
     }
 
+    // Afficher la liste des participants
     /**
      * @Route("/admin/participants", name="participants_list")
      */
@@ -178,8 +154,7 @@ class ProfilController extends AbstractController
         ]);
     }
 
-
-
+    // Mettre à jour un participants
     /**
      * @Route("/admin/participant/update/{id}", name="participant_update")
      */
@@ -201,6 +176,7 @@ class ProfilController extends AbstractController
         ]);
     }
 
+    // Supprimer un participant
     /**
      * @Route("/admin/participant/delete/{id}", name="participant_delete")
      */

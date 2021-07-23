@@ -46,10 +46,6 @@ class SortieController extends AbstractController
 
         $participant = $this->entityManager->getRepository(Participant::class)->find($current);
 
-        if ($participant->getActif() == false) {
-            $participant->setRoles(["ROLE_INACTIF"]);
-
-        }
 
         $etat = $this->entityManager->getRepository(Etat::class)->find(5);
 
@@ -75,6 +71,7 @@ class SortieController extends AbstractController
         ]);
     }
 
+    // Afficher le détail d'une sortie
     /**
      * @Route("/detail/{id}", name="detail")
      */
@@ -87,6 +84,7 @@ class SortieController extends AbstractController
         ]);
     }
 
+    // Créer une sortie
     /**
      * @Route ("/create", name="create")
      */
@@ -146,6 +144,7 @@ class SortieController extends AbstractController
             ]);
     }
 
+    // Modifier une sortie
     /**
      * @Route("/modifier-sortie/{id}", name="modifier_sortie")
      */
@@ -193,6 +192,7 @@ class SortieController extends AbstractController
         ]);
     }
 
+    // Supprimer une sortie
     /**
      * @Route("/supprimer-sortie/{id}", name="delete")
      */
@@ -207,6 +207,7 @@ class SortieController extends AbstractController
 
     }
 
+    // Annuler une sortie
     /**
      * @Route("/annuler-sortie/{id}", name="cancel")
      */
@@ -232,6 +233,7 @@ class SortieController extends AbstractController
 
     }
 
+    // S'inscrire à une sortie
     /**
      * @Route("/join/{id}", name="join")
      */
@@ -291,11 +293,9 @@ class SortieController extends AbstractController
         return $this->redirectToRoute('sortie_list', [
             'sorties' => $sorties]);
 
-
-
-
     }
 
+    // Se désister d'une sortie
     /**
      * @Route("/escape/{id}", name="escape")
      */

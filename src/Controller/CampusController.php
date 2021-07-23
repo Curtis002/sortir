@@ -19,6 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CampusController extends AbstractController
 {
 
+    // Afficher la liste des campus
     /**
      * @Route("/admin/campus", name="campus_list")
      */
@@ -66,6 +67,7 @@ class CampusController extends AbstractController
             ]);
     }
 
+    // Mettre à jour un campus
     /**
      * @Route("/admin/campus/update/{id}", name="campus_update")
      */
@@ -87,6 +89,7 @@ class CampusController extends AbstractController
         ]);
     }
 
+    // Supprimer un campus
     /**
      * @Route("/admin/campus/delete/{id}", name="campus_delete")
      */
@@ -98,20 +101,6 @@ class CampusController extends AbstractController
 
         return $this->redirectToRoute("campus_list");
     }
-
-//    /**
-//     * @Route("/campus", name="campus_list")
-//     */
-//   public function index(CampusRepository $campusRepository): Response
-//    {
-//        $data = new SearchData();
-//        $form = $this->createForm(SearchType::class, $data);
-//        $camps = $campusRepository->findSearch();
-//        return $this->render('admin/campus.html.twig', [
-//            'camps' => $camps,
-//            'form' => $form->createView()
-//        ]);
-//    }
 
 }
 

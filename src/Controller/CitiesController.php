@@ -18,6 +18,7 @@ class CitiesController extends AbstractController
 {
     private $em;
 
+    // Afficher les villes
     /**
      * @Route("/admin/city", name="city_list")
      */
@@ -66,6 +67,7 @@ class CitiesController extends AbstractController
             ]);
     }
 
+    // Mettre à jour une ville
     /**
      * @Route("/admin/city/update/{id}", name="city_update")
      */
@@ -86,6 +88,7 @@ class CitiesController extends AbstractController
         ]);
     }
 
+    // Supprimer une ville
     /**
      * @Route("/admin/city/delete/{id}", name="city_delete")
      */
