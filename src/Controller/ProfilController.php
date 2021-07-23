@@ -137,6 +137,7 @@ class ProfilController extends AbstractController
 
     {
         $participantManu = new Participant();
+        $participantManu->setPhotoProfil("150.png");
         $partForm = $this->createForm(CreateParticipantType::class, $participantManu);
 
         $partForm->handleRequest($request);
