@@ -48,7 +48,7 @@ class CreateParticipantType extends AbstractType
                         'Administrateur' => 'ROLE_ADMIN'
                     ],
                     'expanded' => true,
-                    'multiple' => true,
+                    'multiple' => false,
                     'label' => 'Rôles'
             ])
             ->add('actif', CheckboxType::class, [
