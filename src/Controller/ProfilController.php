@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ProfilController extends AbstractController
@@ -130,18 +131,26 @@ class ProfilController extends AbstractController
     public function list(ParticipantRepository $participantRepository,
                          Request $request,
                          EntityManagerInterface $entityManager,
+                         UserPasswordEncoderInterface $passwordEncoder,
                          FileUploader $fileUploader
     ): Response
 
     {
-        $participants = new Participant();
-        $partForm = $this->createForm(CreateParticipantType::class, $participants);
+        $participantManu = new Participant();
+        $partForm = $this->createForm(CreateParticipantType::class, $participantManu);
 
         $partForm->handleRequest($request);
 
         if($partForm->isSubmitted() && $partForm->isValid())
         {
-            $entityManager->persist($participants);
+            $participantManu->setMotPasse(
+                $passwordEncoder->encodePassword(
+                    $participantManu,
+                    $partForm->get('motPasse')->getData()
+                )
+            );
+            //dd($partForm->getData());
+            $entityManager->persist($participantManu);
             $entityManager->flush();
 
             $this->addFlash('success', 'Un nouveau participant a été ajouté avec succès!');
